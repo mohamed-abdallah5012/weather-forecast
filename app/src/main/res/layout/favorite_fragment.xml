@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back_list"
+    tools:context=".ui.navigation.favorite.FavoriteFragment">
+
+    <TextView
+        android:id="@+id/txt_edit_favorite"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:textDirection="locale"
+        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        android:text="Edit Favorite"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        tools:ignore="RtlCompat" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_margin="20dp"
+        android:id="@+id/edit_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/txt_edit_favorite" />
+
+</RelativeLayout>

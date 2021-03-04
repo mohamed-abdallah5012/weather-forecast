@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Weather</string>
+
+    <string name="clouds">Clouds</string>
+    <string name="rain">Rain</string>
+    <string name="thunderstorm">Thunderstorm</string>
+    <string name="mist">Mist</string>
+    <string name="clear">Clear</string>
+    <string name="humidity">humidity</string>
+    <string name="pressure">pressure</string>
+    <string name="visibility">visibility</string>
+    <string name="Cloudiness">Cloudiness</string>
+    <string name="sunset">sunset</string>
+    <string name="sunrise">sunrise</string>
+
+</resources>
