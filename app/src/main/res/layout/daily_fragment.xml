@@ -1,29 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/back_list"
     android:id="@+id/daily_fragment_test"
     tools:context=".ui.navigation.daily.DailyFragment">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="80dp"
         android:gravity="center"
-        android:text="Daily" />
-
-    <fragment
-        android:id="@+id/start_autoComplete_Frag"
-        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:id="@+id/daily_recycler_view"
+        android:textSize="80dp" />
+    <FrameLayout
+        android:id="@+id/daily_bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:ignore="MissingConstraints" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:background="@drawable/sheet_background">
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_remove_24"
+            android:layout_gravity="center|top">
+        </ImageView>
+        <androidx.viewpager2.widget.ViewPager2
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="40dp"
+            android:id="@+id/daily_view_Pager">
+        </androidx.viewpager2.widget.ViewPager2>
+
+    </FrameLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,11 +2,9 @@ package com.mohamedabdallah.weather.ui.navigation.home
 
 import android.Manifest
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.location.Address
 import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Bundle
@@ -16,9 +14,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -37,28 +35,39 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mohamedabdallah.weather.R
 import com.mohamedabdallah.weather.data.model.FavoritePlace
 import com.mohamedabdallah.weather.data.weather.WeatherData
-import com.mohamedabdallah.weather.ui.navigation.daily.DailyFragment
 import com.mohamedabdallah.weather.ui.navigation.favorite.FavoriteFragment
+import com.mohamedabdallah.weather.ui.navigation.favorite.FavoriteViewModel
 import com.mohamedabdallah.weather.ui.navigation.home.adapter.DailyForecastAdapter
 import com.mohamedabdallah.weather.ui.navigation.favorite.adapter.FavoriteListAdapter
 import com.mohamedabdallah.weather.ui.navigation.home.adapter.FavoriteCitiesAdapter
 import com.mohamedabdallah.weather.ui.navigation.home.adapter.HourlyForecastAdapter
-import com.mohamedabdallah.weather.ui.navigation.map.MapFragment
 import com.mohamedabdallah.weather.utils.Constant
 import java.io.IOException
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
+class HomeFragment : Fragment(),
+    FavoriteCitiesAdapter.OnFavoritePlaceListener,
+    FavoriteListAdapter.OnEditFavoriteListener {
 
     companion object {
         fun newInstance() =
             HomeFragment()
     }
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private lateinit var frameLayout: FrameLayout
+
+
+    private lateinit var favoriteViewModel: FavoriteViewModel
+    private  var favoriteListAdapter=FavoriteListAdapter(emptyList(),this)
+    private lateinit var favoriteListRecyclerView: RecyclerView
+
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var viewModel: HomeViewModel
@@ -81,6 +90,7 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
     private lateinit var tvHour: TextView
     private lateinit var locationName: TextView
     private lateinit var locationIcon: ImageView
+    private lateinit var degreesymbol: TextView
     private lateinit var humidity: TextView
     private lateinit var pressure: TextView
     private lateinit var visibility: TextView
@@ -91,7 +101,7 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
     private lateinit var manageFavorite: TextView
 
     private val favoriteCitiesAdapter = FavoriteCitiesAdapter(emptyList(), this)
-    private val dailyForecastAdapter = DailyForecastAdapter(emptyList())
+    private val dailyForecastAdapter = DailyForecastAdapter(emptyList(),null)
     private val hourlyForecastAdapter = HourlyForecastAdapter(emptyList())
 
 
@@ -107,16 +117,26 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        favoriteViewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
+
 
 
         this.context?.let { Places.initialize(it, Constant.apiPlaces) }
         this.context?.let { placesClient = Places.createClient(it) }
 
 
-        //getMyLocation()
+        bottomSheetBehavior.apply {
+            peekHeight=0
+            this.state=BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+
+        getMyLocation()
         autoCompleteSearch()
         locationIcon.setOnClickListener { getMyLocation() }
-        manageFavorite.setOnClickListener { navigateToFavoriteFragment() }
+        manageFavorite.setOnClickListener { //navigateToFavoriteFragment()
+            bottomSheetBehavior.state=BottomSheetBehavior.STATE_EXPANDED
+        }
 
 
         favoriteRecyclerView.adapter = favoriteCitiesAdapter
@@ -145,6 +165,18 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
                    // Toast.makeText(context,"You Must Enable",Toast.LENGTH_SHORT).show()
                 //   autoCompleteSearch()
         })
+
+
+
+        favoriteListRecyclerView.adapter = favoriteListAdapter
+        favoriteListRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        favoriteListRecyclerView.setHasFixedSize(true)
+
+        favoriteViewModel.getFavoritePlaces().observe(viewLifecycleOwner, Observer {
+
+            favoriteListAdapter.setData(it)
+        })
     }
     private fun navigateToFavoriteFragment() {
         parentFragmentManager
@@ -153,6 +185,15 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
             .commit()
     }
     private fun initialize(view: View) {
+
+        frameLayout=view.findViewById(R.id.favorite_bottom_sheet)
+        bottomSheetBehavior=BottomSheetBehavior.from(frameLayout)
+        favoriteListRecyclerView=view.findViewById(R.id.edit_recycler_view)
+
+
+
+
+
         favoriteRecyclerView = view.findViewById(R.id.cities_recycler_view)
         hourlyRecyclerView = view.findViewById(R.id.hour_recycler_view)
         dailyRecyclerView = view.findViewById(R.id.day_recycler_view)
@@ -177,7 +218,7 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
         tvHour = view.findViewById(R.id.tvHour)
         locationName = view.findViewById(R.id.location_name)
         locationIcon = view.findViewById(R.id.imageLocation)
-        // searchIcon = view.findViewById(R.id.imageSearch)
+        degreesymbol = view.findViewById(R.id.degree_symbol)
         humidity = view.findViewById(R.id.txt_humidity)
         pressure = view.findViewById(R.id.txt_pressure)
         visibility = view.findViewById(R.id.txt_visibility)
@@ -392,6 +433,9 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
                             place.name?.let { getWeather(it) }
                             place.name?.let { getWeatherForecast(it) }
 
+                            getWeather(place.latLng?.latitude.toString(),place.latLng?.longitude.toString())
+                            getWeatherForecast(place.latLng?.latitude.toString(),place.latLng?.longitude.toString())
+
                         } else {
                             Log.i("TAG", "onPlaceSelected: ${task.exception}")
                         }
@@ -432,7 +476,9 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
         visibility.text = it.mVisibility?.toString() + " meter"
         cloudiness.text = it.mClouds?.mAll.toString() + " %"
 
-        // temperatureType.text
+        temperatureType.text=resources.getString(R.string.c)
+        degreesymbol.text=resources.getString(R.string.c)
+        //view.findViewById<TextView>(R.id.ooo).text=resources.getString(R.string.c)
         mainDesc.text = it.mWeather[0].mMain
         fullDesc.text = it.mWeather[0].mDescription
 
@@ -468,13 +514,15 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
     override fun onFavoritePlaceClick(favoritePlace: FavoritePlace) {
         setLocName(favoritePlace.name)
         getWeather(favoritePlace.name)
+        getWeather(favoritePlace.lat.toString(),favoritePlace.lng.toString())
         getWeatherForecast(favoritePlace.name)
+
     }
     private fun getWeather(cityName: String) {
         viewModel.getWeatherByCityName(
             cityName,
             Constant.appID,
-            Constant.english_lang,
+            Constant.api_lang,
             Constant.baseUnit
         )
             .observe(viewLifecycleOwner, Observer {
@@ -487,7 +535,7 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
             latitude,
             longitude,
             Constant.appID,
-            Constant.english_lang,
+            Constant.api_lang,
             Constant.baseUnit
         )
             .observe(viewLifecycleOwner, Observer {
@@ -499,7 +547,7 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
         viewModel.getWeatherForecastByCityName(
             cityName,
             Constant.appID,
-            Constant.english_lang,
+            Constant.api_lang,
             Constant.baseUnit,
             true
         )
@@ -509,7 +557,7 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
         viewModel.getWeatherForecastByCityName(
             cityName,
             Constant.appID,
-            Constant.english_lang,
+            Constant.api_lang,
             Constant.baseUnit,
             false
         )
@@ -524,7 +572,7 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
             latitude,
             longitude,
             Constant.appID,
-            Constant.english_lang,
+            Constant.api_lang,
             Constant.baseUnit,
             true
         )
@@ -535,7 +583,7 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
             latitude,
             longitude,
             Constant.appID,
-            Constant.english_lang,
+            Constant.api_lang,
             Constant.baseUnit,
             false
         )
@@ -561,6 +609,11 @@ class HomeFragment : Fragment(), FavoriteCitiesAdapter.OnFavoritePlaceListener {
     private fun setLocName(value: String) {
         locationName.isSelected = true
         locationName.text = value
+    }
+
+    override fun onRemovePlaceClick(favoritePlace: FavoritePlace) {
+        favoriteViewModel.deleteFavoritePlace(favoritePlace)
+
     }
 
 }

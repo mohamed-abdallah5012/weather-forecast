@@ -49,22 +49,4 @@ fun getTime(date: String): String {
     return outputFormat.format(inputFormat.parse(date))
 
 }
-fun getWeatherIcon(context : Context, weatherType : String) : Drawable? {
-    when(weatherType){
-        context.getString(R.string.clouds) -> {
-            return ContextCompat.getDrawable(context, R.drawable.ic_cloudy)
-        }
-        context.getString(R.string.rain) ->{
-            return ContextCompat.getDrawable(context, R.drawable.ic_rain)
-        }
-        context.getString(R.string.clear)->{
-            return ContextCompat.getDrawable(context, R.drawable.ic_sunny)
-        }
-        context.getString(R.string.thunderstorm) ->{
-            return ContextCompat.getDrawable(context, R.drawable.ic_thunderstorm)
-        }
-        else -> {
-            return ContextCompat.getDrawable(context, R.drawable.ic_sunny)
-        }
-    }
-}
+

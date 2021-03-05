@@ -7,20 +7,24 @@
     <fragment
         android:id="@+id/dailyFragment"
         android:name="com.mohamedabdallah.weather.ui.navigation.daily.DailyFragment"
-        android:label="daily_fragment"
+        android:label="Daily"
         tools:layout="@layout/daily_fragment" />
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.mohamedabdallah.weather.ui.navigation.home.HomeFragment"
-        android:label="HomeFragment" >
+        android:label="Home" >
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.mohamedabdallah.weather.ui.navigation.map.MapFragment"
-        android:label="MapFragment" />
+        android:label="Map" />
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.mohamedabdallah.weather.ui.navigation.favorite.FavoriteFragment"
-        android:label="favorite_fragment"
+        android:label="Favorite"
         tools:layout="@layout/favorite_fragment" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.mohamedabdallah.weather.ui.navigation.settings.SettingsFragment"
+        android:label="Settings" />
 </navigation>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -15,8 +15,7 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -98,25 +97,30 @@
                         android:background="#FBF9F9"
                         android:weightSum="10">
                         <TextView
+
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
                             android:paddingStart="20dp"
                             android:textSize="16dp"
                             android:textDirection="locale"
-                            android:text="Favorite Places"
-                            android:layout_weight="3"/>
+                            android:text="@string/favorite_places"
+                            android:layout_weight="2"/>
 
 
                         <TextView
+                            android:layout_marginTop="1dp"
                             android:id="@+id/manage_favorite"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="Manage"
+                            android:gravity="center_vertical"
+                            android:textSize="14dp"
+                            android:text="@string/manage"
                             android:layout_marginEnd="1dp"
                             android:layout_gravity="end"
-                            android:gravity="center_vertical"
-                            android:layout_weight="7"/>
+                            android:layout_weight="8"/>
 
                     </LinearLayout>
 
@@ -195,7 +199,7 @@
                         android:layout_marginTop="10dp"
                         android:textSize="16dp"
                         android:textDirection="locale"
-                        android:text="Hourly Forecast"
+                        android:text="@string/hourly_forecast"
                         android:layout_weight="3"/>
 
                     </LinearLayout>
@@ -209,9 +213,7 @@
                         android:layout_marginTop="30dp"
                         android:layout_marginEnd="8dp"/>
 
-
                 </androidx.cardview.widget.CardView>
-
 
                 <androidx.cardview.widget.CardView
                 android:id="@+id/card7"
@@ -241,7 +243,7 @@
                         android:layout_marginTop="10dp"
                         android:textSize="16dp"
                         android:textDirection="locale"
-                        android:text="Daily Forecast"
+                        android:text="@string/daily_forecast"
                         android:layout_weight="3"/>
 
 
@@ -259,16 +261,35 @@
 
             </androidx.cardview.widget.CardView>
 
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
         </androidx.core.widget.NestedScrollView>
 
 
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <FrameLayout
+        android:id="@+id/favorite_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card7"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:background="@drawable/sheet_background">
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_remove_24"
+            android:layout_gravity="center|top">
+        </ImageView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <include layout="@layout/favorite_fragment"/>
+
+
+    </FrameLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -12,5 +12,44 @@
     <string name="Cloudiness">Cloudiness</string>
     <string name="sunset">sunset</string>
     <string name="sunrise">sunrise</string>
+    <!-- Preference Titles -->
+    <string name="general_setting">General Settings</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="default_language">Default Language</string>
+    <string name="default_mode">Dark Mode</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="notification_setting">Notifications</string>
+    <string name="unit_setting">Unit Settings</string>
+    <string name="default_temperature">Temperature Unit</string>
+    <string name="default_pressure">Pressure</string>
+    <string name="default_wind">Wind Speed</string>
+    <string name="o">O</string>
+    <string name="c">C</string>
+    <string name="k">K</string>
+    <string name="max">"Max: "</string>
+    <string name="min">Min: </string>
+    <string name="speed_unit">Km/h</string>
+    <string name="favorite_places">Favorite Places</string>
+    <string name="manage">Manage</string>
+    <string name="hourly_forecast">Hourly Forecast</string>
+    <string name="daily_forecast">Daily Forecast</string>
+    <string name="edit_favorite">Edit Favorite</string>
+
+
+    <string name="home">Home</string>
+    <string name="daily">Daily</string>
+    <string name="map">Radar</string>
+    <string name="settings">Settings</string>
+    <string name="alert_setting">Alerts</string>
+
 
 </resources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Weather</string>
+
+    <string name="clouds">سحب</string>
+    <string name="rain">امطار</string>
+    <string name="thunderstorm">عواصف</string>
+    <string name="mist">شبوره</string>
+    <string name="clear">صافي</string>
+    <string name="humidity">الرطوبه</string>
+    <string name="pressure">الظغط</string>
+    <string name="visibility">الرؤيه</string>
+    <string name="Cloudiness">الغيوم</string>
+    <string name="sunset">الغروب</string>
+    <string name="sunrise">الشروق</string>
+    <!-- Preference Titles -->
+    <string name="general_setting">الاعدادات العامه</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="default_language">اللغه الحاليه</string>
+    <string name="default_mode">العرض الليلى</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="notification_setting">الاشعارات</string>
+    <string name="unit_setting">اعدادات القياس</string>
+    <string name="default_temperature">درجه القياس</string>
+    <string name="default_pressure">الضغط</string>
+    <string name="default_wind">سرعه الرياح</string>
+
+    <string name="o">د</string>
+    <string name="c">س</string>
+    <string name="k">ك</string>
+    <string name="max">اعلى درجه</string>
+    <string name="min">اقل درجه</string>
+    <string name="speed_unit">كم/س</string>
+    <string name="favorite_places">الاماكن المفضله</string>
+    <string name="manage">ادراه</string>
+    <string name="hourly_forecast">على مدار الساعه</string>
+    <string name="daily_forecast">يوميا</string>
+    <string name="edit_favorite">تعديل الاماكن المفضله</string>
+
+    <string name="home">الرئيسيه</string>
+    <string name="daily">يوميا</string>
+    <string name="map">رادار</string>
+    <string name="settings">الاعدادات</string>
+
+    <string name="alert_setting">الاشعارات</string>
+
+
+</resources>

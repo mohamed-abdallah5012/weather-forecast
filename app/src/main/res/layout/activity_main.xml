@@ -5,41 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Widget.Design.AppBarLayout">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar1"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/Widget.AppCompat.Light.PopupMenu.Overflow">
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <FrameLayout
         android:id="@+id/fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="202dp"
-        tools:layout_editor_absoluteY="366dp" />
-        <!--app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph"-->
-
-
+        android:layout_marginBottom="56dp"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         style="@style/Widget.Design.BottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_gravity="bottom"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        app:menu="@menu/nav_menu"
-        />
+        app:menu="@menu/nav_menu" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

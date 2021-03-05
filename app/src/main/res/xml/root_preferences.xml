@@ -1,0 +1,69 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/general_setting">
+
+        <ListPreference
+            app:defaultValue="English"
+            app:entries="@array/language_entries"
+            app:entryValues="@array/language_values"
+            app:key="language"
+            app:title="@string/default_language"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/ic_baseline_language_24"/>
+
+        <CheckBoxPreference
+            app:key="background_mode"
+            app:title="@string/default_mode"
+            app:icon="@drawable/ic_baseline_language_24">
+        </CheckBoxPreference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/unit_setting">
+
+        <ListPreference
+            app:defaultValue="Clecious"
+            app:entries="@array/temperature_entries"
+            app:entryValues="@array/temperature_values"
+            app:key="temperature"
+            app:title="@string/default_temperature"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/ic_baseline_language_24"/>
+
+        <ListPreference
+            app:defaultValue="English"
+            app:entries="@array/pressure_entries"
+            app:entryValues="@array/pressure_values"
+            app:key="pressure"
+            app:title="@string/default_pressure"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/ic_baseline_language_24"/>
+
+        <ListPreference
+            app:defaultValue="English"
+            app:entries="@array/wind_entries"
+            app:entryValues="@array/wind_values"
+            app:key="wind"
+            app:title="@string/default_wind"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/ic_baseline_language_24"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/alert_setting"
+        app:icon="@drawable/ic_baseline_map_24">
+
+        <Preference
+            app:key="notification"
+            app:title="@string/notification_setting">
+
+        </Preference>
+
+
+
+
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

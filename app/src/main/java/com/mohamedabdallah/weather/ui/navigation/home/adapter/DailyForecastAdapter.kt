@@ -10,9 +10,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.mohamedabdallah.weather.R
 import com.mohamedabdallah.weather.data.forecast.ForecastCustomizedModel
+import com.mohamedabdallah.weather.data.model.FavoritePlace
 
 class DailyForecastAdapter(
-        private var dailyForecastList: List<ForecastCustomizedModel>
+        private var dailyForecastList: List<ForecastCustomizedModel>,
+        private var listener : DailyForecastAdapter.OnDailyForecastListener?
+
 ) :
         RecyclerView.Adapter<DailyForecastAdapter.ViewHolder>() {
 
@@ -64,14 +67,26 @@ class DailyForecastAdapter(
         return ViewHolder(view)
     }
 
-    class ViewHolder(view: View) :
-            RecyclerView.ViewHolder(view){
+    inner class ViewHolder(view: View) :
+            RecyclerView.ViewHolder(view),View.OnClickListener{
         var date: TextView = view.findViewById(R.id.daily_date)
         var time: TextView = view.findViewById(R.id.daily_time)
         var image: ImageView = view.findViewById(R.id.daily_image)
         var temp: TextView = view.findViewById(R.id.daily_temp)
         var cardView: CardView =view.findViewById(R.id.card_day)
 
+        init {
+            view.setOnClickListener(this)
+        }
+
+        override fun onClick(p0: View?) {
+            listener?.onDailyForecastItemClick(dailyForecastList[adapterPosition])
+        }
+
+    }
+    interface OnDailyForecastListener
+    {
+        fun onDailyForecastItemClick(forcastList: ForecastCustomizedModel)
     }
 
     override fun getItemCount(): Int {
