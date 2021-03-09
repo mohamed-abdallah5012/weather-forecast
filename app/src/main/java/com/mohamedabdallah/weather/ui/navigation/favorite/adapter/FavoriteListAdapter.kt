@@ -6,8 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mohamedabdallah.weather.R
-import com.mohamedabdallah.weather.data.model.FavoritePlace
-import com.mohamedabdallah.weather.ui.navigation.home.adapter.FavoriteCitiesAdapter
+import com.mohamedabdallah.weather.data.favorite.FavoritePlace
 
 class FavoriteListAdapter(
     private var favoritesPlaces: List<FavoritePlace>,

@@ -7,13 +7,11 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mohamedabdallah.weather.data.forecast.ForecastData
-import com.mohamedabdallah.weather.data.model.FavoritePlace
-import com.mohamedabdallah.weather.data.weather.WeatherData
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import com.mohamedabdallah.weather.data.favorite.FavoritePlace
+import com.mohamedabdallah.weather.data.weather.CurrentResponse
+import com.mohamedabdallah.weather.data.forecast.ForecastResponse
+import com.mohamedabdallah.weather.utils.Constant
+import kotlinx.coroutines.*
 
 class HomeRepository(application: Application) {
 
@@ -21,79 +19,92 @@ class HomeRepository(application: Application) {
     private val remote = RemoteSource()
     private val local = LocalSource(application)
 
-    private val job= Job()
-    private val uiScope= CoroutineScope(Dispatchers.Main +job)
+    private val job = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
-    private var weatherData =MutableLiveData<WeatherData>()
-    private var forecastData =MutableLiveData<ForecastData>()
+    private var currentResponse:MutableLiveData<CurrentResponse>? = MutableLiveData<CurrentResponse>()
+    private var forecastResponse:MutableLiveData<ForecastResponse>? = MutableLiveData<ForecastResponse>()
 
-    fun getWeatherByCityName(cityName:String,appId:String,lang:String,unit: String): LiveData<WeatherData> {
+
+    fun getWeatherByLatLong(
+        latitude: Double,
+        longitude: Double,
+        appId: String,
+        lang: String,
+        unit: String
+    ):
+            MutableLiveData<CurrentResponse>? {
         uiScope.launch(Dispatchers.Main) {
-            val response=remote.getWeatherByCityName(cityName,appId,lang,unit)
-            if (response.isSuccessful)
-            {
-                weatherData.value=response.body()
+            currentResponse?.value=getCurrentFromLocal(latitude,longitude)
 
-                //response.body()?.let { local.insertWeatherData(it) }
-            } else {
-                Log.i("TAG", "Get Message: ${response.message()}")
+            try {
+                val response = remote.getWeatherByLatLong(latitude, longitude, appId, lang, unit)
+                if (response.isSuccessful) {
+                    currentResponse?.value = response.body()
+                    if (latitude == Constant.myLat && longitude == Constant.myLon) {
+                        response.body()!!.currentResponseId = "myLocation"
+                    } else {
+                        response.body()!!.currentResponseId =
+                            latitude.toString() + longitude.toString()
+                    }
+                    response.body()!!.coord.lat=latitude
+                    response.body()!!.coord.lon=longitude
+
+                    response.body()?.let { local.saveCurrentResponse(response.body()!!) }
+                } else {
+                    Log.i("TAG", "Get Message: ${response.message()}")
+                }
+            } catch (exception: Exception) {
+                Log.i("TAG", ": $exception")
             }
-
         }
-        //
-        //return local.getWeatherByCityName()
-        return weatherData
-
+        //return local.getCurrentResponse(latitude, longitude)
+        return currentResponse
     }
-    fun getWeatherByLatLong(latitude:String,longitude :String, appId:String, lang:String, unit: String): LiveData<WeatherData> {
+
+    fun getForecastOneApi(
+        latitude: Double,
+        longitude: Double,
+        appId: String,
+        lang: String,
+        unit: String
+    ):
+            MutableLiveData<ForecastResponse>? {
+
         uiScope.launch(Dispatchers.Main) {
-            val response=remote.getWeatherByLatLong(latitude,longitude,appId,lang,unit)
-            if (response.isSuccessful)
-            {
-                weatherData.value=response.body()
-               // response.body()?.let { local.insertWeatherData(it) }
-            } else {
-                Log.i("TAG", "Get Message: ${response.message()}")
+            forecastResponse?.value=getForecastFromLocal(latitude,longitude)
+            try {
+                val response = remote.getForecastOneApi(latitude, longitude, appId, lang, unit)
+                if (response.isSuccessful) {
+                    forecastResponse?.value = response.body()
+                    if (latitude == Constant.myLat && longitude == Constant.myLon) {
+                        response.body()!!.forecastResponseId = "myLocation"
+                    } else {
+                        response.body()!!.forecastResponseId =
+                            latitude.toString() + longitude.toString()
+                    }
+                    response.body()!!.lat=latitude
+                    response.body()!!.lon=longitude
+                    response.body()?.let { local.saveForecastResponse(it) }
+                } else {
+                    Log.i("TAG", "Get Message: ${response.message()}")
+
+                }
+            } catch (exception: Exception) {
+                Log.i("TAG", ": $exception")
             }
-
         }
-        //return local.getWeatherByLatLong()
-        return weatherData
 
+        //return local.getForecastResponse(latitude, longitude)
+        return forecastResponse
     }
-    fun getWeatherForecastByCityName(cityName:String,appId:String,lang:String,unit: String):
-            LiveData<ForecastData> {
-        uiScope.launch(Dispatchers.Main) {
-            val response=remote.getWeatherForecastByCityName(cityName, appId, lang, unit)
-            if (response.isSuccessful)
-            {
-                forecastData.value=response.body()
-                //response.body()?.let { local.insertForecastData(it) }
-            } else {
-                Log.i("TAG", "Get Message: ${response.message()}")
-            }
 
-        }
-        return forecastData
-        //return local.getWeatherForecastByCityName()
-
+    suspend fun deleteCurrentResponse(lat: Double, lon: Double) {
+            local.deleteCurrentResponse(lat, lon)
     }
-    fun getWeatherForecastByLatLong(latitude:String,longitude :String, appId:String, lang:String, unit: String):
-            LiveData<ForecastData> {
-        uiScope.launch(Dispatchers.Main) {
-            val response=remote.getWeatherForecastByLatLong(latitude, longitude, appId, lang, unit)
-            if (response.isSuccessful)
-            {
-                forecastData.value=response.body()
-               // response.body()?.let { local.insertForecastData(it) }
-            } else {
-                Log.i("TAG", "Get Message: ${response.message()}")
-            }
 
-        }
-        return forecastData
-        //return local.getWeatherForecastByLatLong()
-
+    suspend fun deleteForecastResponse(lat: Double, lon: Double) {
+            local.deleteForecastResponse(lat, lon)
     }
 
     fun addFavoritePlace(favoritePlace: FavoritePlace) {
@@ -101,16 +112,64 @@ class HomeRepository(application: Application) {
             local.addFavoritePlace(favoritePlace)
         }
     }
-    fun deleteFavoritePlace(favoritePlace: FavoritePlace) {
-        uiScope.launch {
+    suspend fun deleteFavoritePlace(favoritePlace: FavoritePlace) {
             local.deleteFavoritePlace(favoritePlace)
+    }
+    fun getFavoritesPlaces(): LiveData<List<FavoritePlace>> {
+        return local.getFavoritesPlaces()
+    }
+    private suspend fun getCurrentFromLocal(lat:Double,lng:Double):CurrentResponse? {
+        return local.getCurrentResponse(lat, lng)
+    }
+    private suspend fun getForecastFromLocal(lat:Double, lng:Double):ForecastResponse? {
+        return local.getForecastResponse(lat, lng)
+    }
+
+    fun getWeatherAlert(lat:Double,lng:Double,type:String):Boolean
+    {
+        var key=false
+        runBlocking {
+
+            uiScope.launch(Dispatchers.Main) {
+                var ccc=getCurrentFromLocal(lat,lng)
+                try {
+                    val response = remote.getWeatherByLatLong(lat, lng, Constant.appID, Constant.api_lang, Constant.baseUnit)
+                    if (response.isSuccessful) {
+
+                        //currentResponse?.value = response.body()
+                        ccc=response.body()
+
+                        /*if (lat == Constant.myLat && lng == Constant.myLon) {
+                            response.body()!!.currentResponseId = "myLocation"
+                        } else {
+                            response.body()!!.currentResponseId =
+                                lat.toString() + lng.toString()
+                        }
+                        response.body()!!.coord.lat=lat
+                        response.body()!!.coord.lon=lng
+                        */
+
+                        ccc!!.currentResponseId = lat.toString() + lng.toString()
+                        Log.i("TAG", "inside api")
+                        ccc.let { local.saveCurrentResponse(ccc!!) }
+
+
+                    } else {
+                        Log.i("TAG", "Get Message: ${response.message()}")
+                    }
+                } catch (exception: Exception) {
+                    Log.i("TAG", ": $exception")
+                }
+
+                if (ccc?.weather?.get(0)?.main?.toUpperCase()==type.toUpperCase())
+                    key=true
+                Log.i("TAG", "hffffffff: ${ccc?.weather?.get(0)?.main?.toUpperCase()}")
+                Log.i("TAG", "hffffffffjjj: ${type.toUpperCase()}")
+
+            }.join()
+
         }
+        return key;
     }
-    fun getFavoritesPlaces():LiveData<List<FavoritePlace>> {
-       return local.getFavoritesPlaces()
-    }
-
-
-
 
 }

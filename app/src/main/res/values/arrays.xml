@@ -14,35 +14,40 @@
 
     <string-array name="temperature_entries">
         <item>C</item>
-        <item>k</item>
+        <item>F</item>
     </string-array>
 
     <string-array name="temperature_values">
         <item>c</item>
-        <item>K</item>
+        <item>f</item>
     </string-array>
 
 
 
     <string-array name="pressure_entries">
-        <item>kd</item>
-        <item>kv</item>
+        <item>HPA</item>
+        <item>MBAR</item>
+        <item>ATM</item>
     </string-array>
 
     <string-array name="pressure_values">
-        <item>kd</item>
-        <item>kv</item>
+        <item>hpa</item>
+        <item>mbar</item>
+        <item>atm</item>
     </string-array>
 
 
     <string-array name="wind_entries">
-        <item>ab</item>
-        <item> Mode</item>
+        <item>M/S</item>
+        <item>KM/H</item>
+        <item>MPH</item>
     </string-array>
 
     <string-array name="wind_values">
-        <item>ab</item>
-        <item>Night Mode</item>
+        <item>m/s</item>
+        <item>km/h</item>
+        <item>mph</item>
+
     </string-array>
 
 

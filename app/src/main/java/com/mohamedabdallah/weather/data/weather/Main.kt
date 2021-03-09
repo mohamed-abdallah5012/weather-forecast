@@ -4,21 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data
 class Main(
-        @SerializedName("feels_like")
-        var mFeelsLike: Double? = null,
-        @SerializedName("humidity")
-        val mHumidity: Long? = null,
-
-        @SerializedName("pressure")
-        val mPressure: Long? = null,
-
-        @SerializedName("temp")
-        val mTemp: Float? = null,
-
-        @SerializedName("temp_max")
-        val mTempMax: Double? = null,
-
-        @SerializedName("temp_min")
-        val mTempMin: Double? = null
+        var feels_like: Double? = null,
+        var humidity: Long? = null,
+        var pressure: Long? = null,
+        var temp: Float? = null,
+        var temp_max: Double? = null,
+        var temp_min: Double? = null
 ) {
 }

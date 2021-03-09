@@ -8,70 +8,93 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.AdapterView.OnItemClickListener
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.Toast
+import android.widget.AutoCompleteTextView
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mohamedabdallah.weather.R
+import com.mohamedabdallah.weather.utils.Constant
 
 
 class MapFragment : Fragment() {
 
-    companion object {
-        fun newInstance() =
-            MapFragment()
-    }
 
     private lateinit var viewModel: MapViewModel
     private lateinit var webView: WebView
     private lateinit var fab: FloatingActionButton
-    private val ID = "109eb1fce9d8083508804d3fd2ca8104db07af6e"
-    private val mapType = arrayOf("aa", "a", "a", "aa", "a")
+    private lateinit var progressBar: ProgressBar
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.map_fragment, container, false)
-
         webView = view.findViewById(R.id.mapView)
         fab = view.findViewById(R.id.fab)
+        progressBar = view.findViewById(R.id.progress_map)
+
 
         return view
     }
+    private fun initializeDialog() {
+        val inflater = LayoutInflater.from(requireContext())
+        val inflate_view: View =
+            inflater.inflate(R.layout.dialog_contact_dark, null)
+        val closeImage =
+            inflate_view.findViewById<ImageView>(R.id.bt_close)
 
+        closeImage.setOnClickListener { v: View? ->
+
+        }
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(inflate_view)
+        builder.setCancelable(true)
+        builder.create()
+        builder.create().show()
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MapViewModel::class.java)
 
-        fab.setOnClickListener {chooseLayer()}
+        fab.setOnClickListener { //showAlertDialog()
+            initializeDialog() }
+
+        showProgressBar()
         initMap()
+
     }
-
-    private fun initMap(layer:String="temp") {
-
-        webView.webViewClient = WebViewClient()
-        webView.loadUrl("http://maps.goweatherradar.com/en/widget/1bfe4f546eb8a1d9fbe2f73812e60361e616c57d?lat=20&lng=50&overlay=${layer}&application_id=XEBIYYivwDIjUX5YHiUSPM19SEOx7fsF")
-        webView.settings.javaScriptEnabled = true
-        webView.settings.setSupportZoom(true)
+    private fun showProgressBar() {
+        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
+            if (it == true)
+                progressBar.visibility = View.VISIBLE
+            else
+                progressBar.visibility = View.VISIBLE
+        })
     }
-
-    private fun chooseLayer() {
-        val choices = arrayOf("temp", "rain", "wind","pressure","clouds","humidity")
+    private fun initMap() {
+        viewModel.currentMode.observe(viewLifecycleOwner, Observer {
+            webView.webViewClient = WebViewClient()
+            webView.loadUrl("${Constant.radarUrl}${Constant.radarUrlExtension}?lat=${Constant.currentLat}&lng=${Constant.currentLon}&overlay=${it}&application_id=${Constant.radarAppID}")
+            webView.settings.javaScriptEnabled = true
+            webView.settings.setSupportZoom(true)
+        })
+    }
+    private fun showAlertDialog() {
+        val choices = viewModel.getAvailableModes()
         val alertDialogBuilder = AlertDialog.Builder(context)
-            .setTitle("Tilte")
+            .setTitle(resources.getString(R.string.choose_mode))
             .setSingleChoiceItems(choices, -1)
-            {
-                    dialogInterface, i ->
+            { dialogInterface, i ->
                 dialogInterface.cancel()
-                initMap(choices[i])
+                viewModel.setCurrentMode(choices[i])
+                initMap()
             }
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
     }
-
 }

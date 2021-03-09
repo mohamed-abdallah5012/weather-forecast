@@ -1,19 +1,13 @@
 package com.mohamedabdallah.weather.data.weather
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data
 class Weather(
-
-        @SerializedName("description")
-        var mDescription: String?=null,
-        @SerializedName("icon")
-        val mIcon: String?=null,
-
-        @SerializedName("id")
-        val mWeatherId: Long?=null,
-
-        @SerializedName("main")
-        val mMain: String?=null
-) {
-}
+        var description: String?=null,
+        var icon: String?=null,
+        var id: Long?=null,
+        var main: String?=null
+)

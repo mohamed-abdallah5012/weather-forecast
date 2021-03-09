@@ -4,19 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data
 class Sys(
-        @SerializedName("country")
-        var mCountry: String? = null,
-        @SerializedName("id")
-        val mId: Long? = null,
-
-        @SerializedName("sunrise")
-        val mSunrise: Long,
-
-        @SerializedName("sunset")
-        val mSunset: Long,
-
-        @SerializedName("type")
-         val mType: Long? = null
+        var country: String? = null,
+        var id: Long? = null,
+        var sunrise: Long,
+        var sunset: Long,
+        var type: Long? = null
 ) {
 }
 

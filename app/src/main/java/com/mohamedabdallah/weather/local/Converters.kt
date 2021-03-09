@@ -1,13 +1,13 @@
 package com.mohamedabdallah.weather.local
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.mohamedabdallah.weather.data.forecast.City
-import com.mohamedabdallah.weather.data.forecast.ListWeatherInfo
+import com.google.gson.reflect.TypeToken
 import com.mohamedabdallah.weather.data.weather.*
-import java.io.ByteArrayOutputStream
+import com.mohamedabdallah.weather.data.forecast.Alert
+import com.mohamedabdallah.weather.data.forecast.Daily
+import com.mohamedabdallah.weather.data.forecast.Hourly
+
 
 class Converters {
 
@@ -73,19 +73,54 @@ class Converters {
 
     //
 
+
     @TypeConverter
-    fun fromWeather(weather: Weather): String
-    {
-        return Gson().toJson(weather)
+    fun toWeather(value: String): List<Weather> {
+        val listType = object : TypeToken<List<Weather>>() {}.type
+        return Gson().fromJson(value, listType)
     }
 
     @TypeConverter
-    fun toWeather(value :String) : Weather
-
-    {
-        return Gson().fromJson(value,Weather::class.java)
+    fun fromWeather(list: List<Weather>): String {
+        val gson = Gson()
+        return gson.toJson(list)
     }
-    //
+
+    @TypeConverter
+    fun toAlerts(value: String?): List<Alert?>? {
+        val listType = object : TypeToken<List<Alert?>?>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromAlerts(list: List<Alert>?): String? {
+        val gson = Gson()
+        return gson.toJson(list)
+    }
+
+    @TypeConverter
+    fun toDaily(value: String): List<Daily> {
+        val listType = object : TypeToken<List<Daily>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromDaily(list: List<Daily>): String {
+        val gson = Gson()
+        return gson.toJson(list)
+    }
+
+    @TypeConverter
+    fun toHourly(value: String): List<Hourly> {
+        val listType = object : TypeToken<List<Hourly>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromHourly(list: List<Hourly>): String {
+        val gson = Gson()
+        return gson.toJson(list)
+    }
 
     @TypeConverter
     fun fromWind(wind: Wind): String
@@ -100,48 +135,30 @@ class Converters {
         return Gson().fromJson(value,Wind::class.java)
     }
 
+
+
     @TypeConverter
-    fun fromCity(city: City): String
+    fun fromAlert(alert: Alert): String
     {
-        return Gson().toJson(city)
+        return Gson().toJson(alert)
     }
 
     @TypeConverter
-    fun toCity(value :String) : City
+    fun toAlert(value :String) : Alert
 
     {
-        return Gson().fromJson(value,City::class.java)
+        return Gson().fromJson(value,Alert::class.java)
+    }
+    @TypeConverter
+    fun fromHourly(hourly: Hourly): String
+    {
+        return Gson().toJson(hourly)
     }
 
     @TypeConverter
-    fun fromListWeatherInfo(list: ListWeatherInfo): String
-    {
-        return Gson().toJson(list)
-    }
-
-    @TypeConverter
-    fun toListWeatherInfo(value :String) : ListWeatherInfo
+    fun toHourly1(value :String) : Hourly
 
     {
-        return Gson().fromJson(value,ListWeatherInfo::class.java)
+        return Gson().fromJson(value,Hourly::class.java)
     }
-
-    @TypeConverter
-    fun fromBitmap(bitmap: Bitmap): ByteArray
-    {
-        val outputStream=ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream)
-        return outputStream.toByteArray()
-    }
-
-    @TypeConverter
-    fun toBitmap(value :ByteArray) : Bitmap
-
-    {
-        return BitmapFactory.decodeByteArray(value,0,value.size)
-    }
-
-
-
-
 }

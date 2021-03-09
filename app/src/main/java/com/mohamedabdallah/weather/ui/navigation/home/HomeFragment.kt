@@ -37,35 +37,28 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mohamedabdallah.weather.R
-import com.mohamedabdallah.weather.data.model.FavoritePlace
-import com.mohamedabdallah.weather.data.weather.WeatherData
+import com.mohamedabdallah.weather.data.favorite.FavoritePlace
+import com.mohamedabdallah.weather.data.weather.CurrentResponse
+import com.mohamedabdallah.weather.ui.navigation.daily.adapter.DailyForecastAdapter
 import com.mohamedabdallah.weather.ui.navigation.favorite.FavoriteFragment
 import com.mohamedabdallah.weather.ui.navigation.favorite.FavoriteViewModel
-import com.mohamedabdallah.weather.ui.navigation.home.adapter.DailyForecastAdapter
+import com.mohamedabdallah.weather.ui.navigation.favorite.adapter.FavoriteCitiesAdapter
 import com.mohamedabdallah.weather.ui.navigation.favorite.adapter.FavoriteListAdapter
-import com.mohamedabdallah.weather.ui.navigation.home.adapter.FavoriteCitiesAdapter
 import com.mohamedabdallah.weather.ui.navigation.home.adapter.HourlyForecastAdapter
-import com.mohamedabdallah.weather.utils.Constant
+import com.mohamedabdallah.weather.utils.*
 import java.io.IOException
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 class HomeFragment : Fragment(),
     FavoriteCitiesAdapter.OnFavoritePlaceListener,
     FavoriteListAdapter.OnEditFavoriteListener {
 
-    companion object {
-        fun newInstance() =
-            HomeFragment()
-    }
-
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var frameLayout: FrameLayout
 
 
     private lateinit var favoriteViewModel: FavoriteViewModel
-    private  var favoriteListAdapter=FavoriteListAdapter(emptyList(),this)
+    private var favoriteListAdapter = FavoriteListAdapter(emptyList(), this)
     private lateinit var favoriteListRecyclerView: RecyclerView
 
 
@@ -74,6 +67,8 @@ class HomeFragment : Fragment(),
     private lateinit var favoriteRecyclerView: RecyclerView
     private lateinit var hourlyRecyclerView: RecyclerView
     private lateinit var dailyRecyclerView: RecyclerView
+    private lateinit var ooo: TextView
+    private lateinit var oooo: TextView
     private lateinit var temp: TextView
     private lateinit var temperature: TextView
     private lateinit var minTemp: TextView
@@ -100,8 +95,12 @@ class HomeFragment : Fragment(),
     private lateinit var placesClient: PlacesClient
     private lateinit var manageFavorite: TextView
 
-    private val favoriteCitiesAdapter = FavoriteCitiesAdapter(emptyList(), this)
-    private val dailyForecastAdapter = DailyForecastAdapter(emptyList(),null)
+    private val favoriteCitiesAdapter =
+        FavoriteCitiesAdapter(
+            emptyList(),
+            this
+        )
+    private val dailyForecastAdapter = DailyForecastAdapter(emptyList(), null)
     private val hourlyForecastAdapter = HourlyForecastAdapter(emptyList())
 
 
@@ -126,8 +125,8 @@ class HomeFragment : Fragment(),
 
 
         bottomSheetBehavior.apply {
-            peekHeight=0
-            this.state=BottomSheetBehavior.STATE_COLLAPSED
+            peekHeight = 0
+            this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
 
@@ -135,7 +134,7 @@ class HomeFragment : Fragment(),
         autoCompleteSearch()
         locationIcon.setOnClickListener { getMyLocation() }
         manageFavorite.setOnClickListener { //navigateToFavoriteFragment()
-            bottomSheetBehavior.state=BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
 
@@ -148,7 +147,6 @@ class HomeFragment : Fragment(),
         hourlyRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         hourlyRecyclerView.setHasFixedSize(true)
-        //hourlyRecyclerView.setItemViewCacheSize(20)
 
         dailyRecyclerView.adapter = dailyForecastAdapter
         dailyRecyclerView.layoutManager =
@@ -158,14 +156,13 @@ class HomeFragment : Fragment(),
 
         viewModel.getFavoritePlaces().observe(viewLifecycleOwner, Observer {
             favoriteCitiesAdapter.setData(it)
-           // if (locationName.text.isNullOrEmpty())
-             //  if (it.isNotEmpty())
-               //     getWeather(it[0].name)
-              // else
-                   // Toast.makeText(context,"You Must Enable",Toast.LENGTH_SHORT).show()
-                //   autoCompleteSearch()
+            // if (locationName.text.isNullOrEmpty())
+            //  if (it.isNotEmpty())
+            //     getWeather(it[0].name)
+            // else
+            // Toast.makeText(context,"You Must Enable",Toast.LENGTH_SHORT).show()
+            //   autoCompleteSearch()
         })
-
 
 
         favoriteListRecyclerView.adapter = favoriteListAdapter
@@ -178,19 +175,24 @@ class HomeFragment : Fragment(),
             favoriteListAdapter.setData(it)
         })
     }
+
+    override fun onStart() {
+        super.onStart()
+        getMyLocation()
+    }
+
     private fun navigateToFavoriteFragment() {
         parentFragmentManager
             .beginTransaction()
             .replace(R.id.fragment, FavoriteFragment())
             .commit()
     }
+
     private fun initialize(view: View) {
 
-        frameLayout=view.findViewById(R.id.favorite_bottom_sheet)
-        bottomSheetBehavior=BottomSheetBehavior.from(frameLayout)
-        favoriteListRecyclerView=view.findViewById(R.id.edit_recycler_view)
-
-
+        frameLayout = view.findViewById(R.id.favorite_bottom_sheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(frameLayout)
+        favoriteListRecyclerView = view.findViewById(R.id.edit_recycler_view)
 
 
 
@@ -204,6 +206,8 @@ class HomeFragment : Fragment(),
         temp = view.findViewById(R.id.tvTemperature)
         temperature = view.findViewById(R.id.temperature)
 
+        ooo=view.findViewById(R.id.ooo)
+        oooo=view.findViewById(R.id.oooo)
         minTemp = view.findViewById(R.id.min_temp)
         maxTemp = view.findViewById(R.id.max_temp)
         windSpeed = view.findViewById(R.id.tvWind_speed)
@@ -226,12 +230,10 @@ class HomeFragment : Fragment(),
         sunrise = view.findViewById(R.id.txt_sunrise)
         sunset = view.findViewById(R.id.txt_sunset)
 
-        val c: Calendar = Calendar.getInstance()
-        val currentDate = DateFormat.getDateInstance(DateFormat.DEFAULT).format(c.time)
-        val simpleTimeFormat = SimpleDateFormat("hh:mm")
-        val currentTime = simpleTimeFormat.format(c.time)
-        tvDate.text = currentDate
-        tvHour.text = currentTime
+
+        tvDate.text = getCurrentDate()
+        tvHour.text = getCurrentTime()
+
     }
 
     private fun isLocationEnabled(mContext: Context): Boolean {
@@ -253,7 +255,7 @@ class HomeFragment : Fragment(),
                 )
                 startActivity(gpsOptionsIntent)
             }
-            .setNegativeButton("No") { dialog, id ->  dialog.cancel()}
+            .setNegativeButton("No") { dialog, id -> dialog.cancel() }
         val alert = builder.create()
         alert.setTitle("Location Services is Disabled")
         alert.show()
@@ -268,9 +270,14 @@ class HomeFragment : Fragment(),
             fusedLocationProviderClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location != null) {
-                        Log.i("TAG", "getMyLocation: mohamed")
-                        getWeather(location.latitude.toString(),location.longitude.toString())
-                        getWeatherForecast(location.latitude.toString(),location.longitude.toString())
+                        Constant.myLat=location.latitude
+                        Constant.myLon=location.longitude
+
+                        Constant.currentLat=location.latitude
+                        Constant.currentLon=location.longitude
+
+                        getWeather(location.latitude, location.longitude)
+                        getWeatherForecast(location.latitude, location.longitude)
                         getAddress(LatLng(location.latitude, location.longitude))
 
                     } else {
@@ -280,6 +287,7 @@ class HomeFragment : Fragment(),
                 }
         }
     }
+
     private fun getMyLoc() {
         val locationRequest = LocationRequest.create()
         locationRequest.interval = 10000
@@ -298,9 +306,15 @@ class HomeFragment : Fragment(),
                             locationResult.locations[index].latitude
                         val lng =
                             locationResult.locations[index].longitude
-                          getWeather(lat.toString(),lng.toString())
-                          getWeatherForecast(lat.toString(),lng.toString())
-                          getAddress(LatLng(lat,lng))
+                        Constant.myLat=lat
+                        Constant.myLon=lng
+
+                        Constant.currentLat=lat
+                        Constant.currentLon=lng
+
+                        getWeather(lat, lng)
+                        getWeatherForecast(lat, lng)
+                        getAddress(LatLng(lat, lng))
 
                     }
                 }
@@ -351,19 +365,6 @@ class HomeFragment : Fragment(),
 
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 101) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //getMyLocation()
-            }
-        }
-    }
-
     private fun autoCompleteSearch() {
 
         // Initialize the AutocompleteSupportFragment.
@@ -391,10 +392,14 @@ class HomeFragment : Fragment(),
                     placesClient.fetchPhoto(it)
                         .addOnSuccessListener { fetchPhotoResponse ->
                             val bit: Bitmap = fetchPhotoResponse.bitmap
+                            Constant.currentLat=currentPlace!!.latLng!!.latitude
+                            Constant.currentLon=currentPlace!!.latLng!!.longitude
 
-                            // Log.i("TAG", "attributions: ${place.photoMetadatas!![0].attributions}")
+                            getWeather(currentPlace!!.latLng!!.latitude, currentPlace!!.latLng!!.longitude)
+                            getWeatherForecast(currentPlace!!.latLng!!.latitude, currentPlace!!.latLng!!.longitude)
 
-                            if (favoriteCitiesAdapter.getData().size < 5) {
+                            val path = saveToInternalStorage(bit, context!!, "${place.name}")
+                            if (favoriteCitiesAdapter.getData().size < 13) {
                                 val alertDialogBuilder = android.app.AlertDialog.Builder(context)
                                     .setTitle("Add To Your Favorite")
                                     .setMessage("Add ${place.name} To Your Favorite List")
@@ -405,9 +410,8 @@ class HomeFragment : Fragment(),
                                             "${place.address}",
                                             currentPlace!!.latLng!!.latitude,
                                             currentPlace!!.latLng!!.longitude,
-                                            bit
+                                            path!!
                                         )
-
                                     }
                                     .setNegativeButton("Cancel") { dialogInterface, i ->
                                         dialogInterface.dismiss()
@@ -416,12 +420,10 @@ class HomeFragment : Fragment(),
                                 alertDialog.show()
                             }
 
-                            Log.i("TAG", "attributions: ${place.photoMetadatas!![0].attributions}")
-
                         }
                 }
 
-                placesClient.fetchPlace(
+               /* placesClient.fetchPlace(
                     FetchPlaceRequest.builder(
                         place.id!!,
                         Arrays.asList(Place.Field.LAT_LNG)
@@ -430,16 +432,13 @@ class HomeFragment : Fragment(),
                     .addOnCompleteListener(OnCompleteListener { task ->
                         if (task.isSuccessful) {
                             currentPlace = task.result.place
-                            place.name?.let { getWeather(it) }
-                            place.name?.let { getWeatherForecast(it) }
-
-                            getWeather(place.latLng?.latitude.toString(),place.latLng?.longitude.toString())
-                            getWeatherForecast(place.latLng?.latitude.toString(),place.latLng?.longitude.toString())
+                            getWeather(place.latLng!!.latitude, place.latLng!!.longitude)
+                            getWeatherForecast(place.latLng!!.latitude, place.latLng!!.longitude)
 
                         } else {
-                            Log.i("TAG", "onPlaceSelected: ${task.exception}")
+
                         }
-                    })
+                    })*/
 
                 currentPlace.name?.let { setLocName(it) }
             }
@@ -451,38 +450,37 @@ class HomeFragment : Fragment(),
         })
 
     }
-    private fun setData(it: WeatherData) {
 
-        cityName.isSelected=true
-        cityName.text=it.mName
-        temp.text = it.mMain?.mTemp.toString()
-        temperature.text = it.mMain?.mTemp.toString()
+    private fun setData(it: CurrentResponse) {
 
-        minTemp.text = it.mMain?.mTempMin.toString()
-        maxTemp.text = it.mMain?.mTempMax.toString()
-        windSpeed.text = it.mWind?.mSpeed.toString()
-        mainState.text =it.mWeather[0].mMain
-        humidity.text = it.mMain?.mHumidity.toString() + " %"
-        pressure.text = it.mMain?.mPressure.toString()
+        cityName.isSelected = true
+        cityName.text = it.name
+        temp.text = it.main?.temp.toString()
+        temperature.text = it.main?.temp.toString()
 
-        val sunsetDate = Date(it.mSys!!.mSunset * 1000L)
-        val sunriseDate = Date(it.mSys!!.mSunrise * 1000L)
+        minTemp.text = it.main?.temp_min.toString()
+        maxTemp.text = it.main?.temp_max.toString()
+        windSpeed.text = it.wind?.speed.toString()
+        mainState.text = it.weather[0].main
+        humidity.text = it.main?.humidity.toString() + " %"
+        pressure.text = it.main?.pressure.toString()
 
-        val simpleFormat = SimpleDateFormat("hh:mm a")
-        sunset.text = simpleFormat.format(sunsetDate.time)
-        sunrise.text = simpleFormat.format(sunriseDate.time)
+        sunset.text = getSunSet(it.sys!!.sunset)
+        sunrise.text = getSunSet(it.sys!!.sunrise)
 
 
-        visibility.text = it.mVisibility?.toString() + " meter"
-        cloudiness.text = it.mClouds?.mAll.toString() + " %"
+        visibility.text = it.visibility?.toString() + " m"
+        cloudiness.text = it.clouds?.all.toString() + " %"
 
-        temperatureType.text=resources.getString(R.string.c)
-        degreesymbol.text=resources.getString(R.string.c)
+        temperatureType.text = resources.getString(R.string.c)
+        degreesymbol.text = resources.getString(R.string.c)
+        ooo.text=resources.getString(R.string.o)
+        oooo.text=resources.getString(R.string.o)
         //view.findViewById<TextView>(R.id.ooo).text=resources.getString(R.string.c)
-        mainDesc.text = it.mWeather[0].mMain
-        fullDesc.text = it.mWeather[0].mDescription
+        mainDesc.text = it.weather[0].main
+        fullDesc.text = it.weather[0].description
 
-        when (it.mWeather?.get(0)?.mMain) {
+        when (it.weather?.get(0)?.main) {
 
             resources.getString(R.string.clouds) -> {
                 mainStateview.setImageResource(R.drawable.ic_cloudy)
@@ -511,26 +509,19 @@ class HomeFragment : Fragment(),
         }
 
     }
+
     override fun onFavoritePlaceClick(favoritePlace: FavoritePlace) {
+        Constant.currentLat=favoritePlace.lat
+        Constant.currentLon=favoritePlace.lng
         setLocName(favoritePlace.name)
-        getWeather(favoritePlace.name)
-        getWeather(favoritePlace.lat.toString(),favoritePlace.lng.toString())
-        getWeatherForecast(favoritePlace.name)
+        Log.i("TAG", " favorite______________:${favoritePlace.lat} ")
+        Log.i("TAG", "favorite______________:${favoritePlace.lng} ")
+        getWeatherForecast(favoritePlace.lat, favoritePlace.lng)
+        getWeather(favoritePlace.lat, favoritePlace.lng)
 
     }
-    private fun getWeather(cityName: String) {
-        viewModel.getWeatherByCityName(
-            cityName,
-            Constant.appID,
-            Constant.api_lang,
-            Constant.baseUnit
-        )
-            .observe(viewLifecycleOwner, Observer {
-                setData(it)
-            })
-    }
 
-    private fun getWeather(latitude: String, longitude: String) {
+    private fun getWeather(latitude: Double, longitude: Double) {
         viewModel.getWeatherByLatLong(
             latitude,
             longitude,
@@ -538,57 +529,40 @@ class HomeFragment : Fragment(),
             Constant.api_lang,
             Constant.baseUnit
         )
-            .observe(viewLifecycleOwner, Observer {
-                setData(it)
+            ?.observe(viewLifecycleOwner, Observer {
+                if (it != null) {
+                    setData(it)
+                   // Log.i("Home lat", "laa:${it.coord.lat} ")
+                    //Log.i("Home Lon", "laa:${it.coord.lon} ")
+                }
+                else {
+                    Log.i("TAG", "getWeather: dffffffffffff")
+                }
             })
     }
 
-    private fun getWeatherForecast(cityName: String) {
-        viewModel.getWeatherForecastByCityName(
-            cityName,
-            Constant.appID,
-            Constant.api_lang,
-            Constant.baseUnit,
-            true
-        )
-            ?.observe(viewLifecycleOwner, Observer {
-                hourlyForecastAdapter.setData(it)
-            })
-        viewModel.getWeatherForecastByCityName(
-            cityName,
-            Constant.appID,
-            Constant.api_lang,
-            Constant.baseUnit,
-            false
-        )
-            ?.observe(viewLifecycleOwner, Observer {
-                dailyForecastAdapter.setData(it)
-            })
-    }
+    private fun getWeatherForecast(
+        latitude: Double,
+        longitude: Double
+    ) {
 
-    private fun getWeatherForecast(latitude: String, longitude: String) {
+        viewModel.getForecastOneApi(
+            latitude,longitude,
+            Constant.appID,
+            Constant.api_lang,
+            Constant.baseUnit
+        )
+            ?.observe(viewLifecycleOwner, Observer {
+                if (it != null) {
+                    hourlyForecastAdapter.setData(it.hourly)
+                    dailyForecastAdapter.setData(it.daily)
+                    Log.i("TAG", "laa:${it.lat} ")
+                    Log.i("TAG", "laa:${it.lon} ")
 
-        viewModel.getWeatherForecastByLatLong(
-            latitude,
-            longitude,
-            Constant.appID,
-            Constant.api_lang,
-            Constant.baseUnit,
-            true
-        )
-            ?.observe(viewLifecycleOwner, Observer {
-                hourlyForecastAdapter.setData(it)
-            })
-        viewModel.getWeatherForecastByLatLong(
-            latitude,
-            longitude,
-            Constant.appID,
-            Constant.api_lang,
-            Constant.baseUnit,
-            false
-        )
-            ?.observe(viewLifecycleOwner, Observer {
-                dailyForecastAdapter.setData(it)
+                } else {
+                    hourlyForecastAdapter.setData(emptyList())
+                    dailyForecastAdapter.setData(emptyList())
+                }
             })
 
 
@@ -600,10 +574,10 @@ class HomeFragment : Fragment(),
         address: String,
         lat: Double,
         lng: Double,
-        bit: Bitmap
+        path: String
     ) {
 
-        viewModel.addFavoritePlace(FavoritePlace(placeID!!, name, address, lat, lng, bit))
+        viewModel.addFavoritePlace(FavoritePlace(placeID!!, name, address, lat, lng, path))
     }
 
     private fun setLocName(value: String) {
@@ -613,7 +587,8 @@ class HomeFragment : Fragment(),
 
     override fun onRemovePlaceClick(favoritePlace: FavoritePlace) {
         favoriteViewModel.deleteFavoritePlace(favoritePlace)
+        favoriteViewModel.deleteCurrentResponse(favoritePlace.lat,favoritePlace.lng)
+        favoriteViewModel.deleteForecastResponse(favoritePlace.lat,favoritePlace.lng)
 
     }
-
 }

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.cardview.widget.CardView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="7.5dp"
+        android:foregroundGravity="center"
+        app:cardCornerRadius="75dp"
+        app:cardElevation="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/alarm_tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="This is Title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"></TextView>
+
+            <TextView
+                android:id="@+id/alarm_tv_type"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:gravity="center"
+                android:text="this is type"
+                app:layout_constraintEnd_toStartOf="@id/alarm_iv_edit"
+                app:layout_constraintHorizontal_weight="8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/alarm_tv_title"></TextView>
+
+            <ImageButton
+                android:id="@+id/alarm_iv_edit"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:src="@drawable/ic_baseline_edit_24"
+                app:layout_constraintEnd_toStartOf="@id/alarm_iv_delete"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toEndOf="@id/alarm_tv_type"
+                app:layout_constraintTop_toBottomOf="@id/alarm_tv_title"></ImageButton>
+
+            <ImageButton
+                android:id="@+id/alarm_iv_delete"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:src="@drawable/ic_baseline_delete_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toEndOf="@id/alarm_iv_edit"
+                app:layout_constraintTop_toBottomOf="@id/alarm_tv_title"></ImageButton>
+
+            <TextView
+                android:id="@+id/alarm_tv_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Any time"
+                app:layout_constraintEnd_toStartOf="@id/alarm_tv_places"
+                app:layout_constraintHorizontal_weight="8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/alarm_iv_delete"></TextView>
+
+            <TextView
+                android:id="@+id/alarm_tv_places"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="places 5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="5"
+                app:layout_constraintStart_toEndOf="@id/alarm_tv_time"
+                app:layout_constraintTop_toBottomOf="@id/alarm_iv_delete"></TextView>
+
+            <com.dpro.widgets.WeekdaysPicker
+                android:id="@+id/weekdays"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:sunday_first_day="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/alarm_tv_time"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,11 @@
 package com.mohamedabdallah.weather.local
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
-import com.mohamedabdallah.weather.data.forecast.ForecastData
-import com.mohamedabdallah.weather.data.model.FavoritePlace
-import com.mohamedabdallah.weather.data.weather.WeatherData
+import com.mohamedabdallah.weather.data.favorite.FavoritePlace
+import com.mohamedabdallah.weather.data.forecast.ForecastResponse
+import com.mohamedabdallah.weather.data.weather.CurrentResponse
 
 class LocalSource (application:Application) {
 
@@ -20,32 +21,26 @@ class LocalSource (application:Application) {
     suspend fun deleteFavoritePlace(favoritePlace: FavoritePlace){
         database.dao.deleteFavoritePlace(favoritePlace)
     }
-
-    /*
-    fun getWeatherByCityName():LiveData<WeatherData>{
-        return database.dao.getWeatherByCityName()
+    suspend fun getForecastResponse(lat:Double,lng:Double):ForecastResponse?{
+        Log.i("TAG", "getForecastResponse: from local")
+        return database.dao.getForecastResponse(lat,lng)
+    }
+    suspend fun saveForecastResponse(resp: ForecastResponse){
+        database.dao.saveForecastResponse(resp)
+    }
+    suspend fun deleteForecastResponse(lat:Double,lng:Double){
+        database.dao.deleteForecastResponse(lat,lng)
     }
 
-    fun getWeatherByLatLong():LiveData<WeatherData>{
-        return database.dao.getWeatherByLatLong()
+    suspend fun getCurrentResponse(lat:Double,lng:Double):CurrentResponse?{
+        return database.dao.getCurrentResponse(lat,lng)
+    }
+    suspend fun saveCurrentResponse(resp: CurrentResponse){
+        database.dao.saveCurrentResponse(resp)
+    }
+    suspend fun deleteCurrentResponse(lat:Double,lng:Double){
+        database.dao.deleteCurrentResponse(lat,lng)
     }
 
-    fun getWeatherForecastByCityName():LiveData<ForecastData>{
-         return database.dao.getWeatherForecastByCityName()
-    }
-    fun getWeatherForecastByLatLong():LiveData<ForecastData>{
-        return database.dao.getWeatherForecastByLatLong()
-    }
-
-
-    suspend fun insertWeatherData(weatherData: WeatherData){
-        database.dao.insertWeatherData(weatherData)
-    }
-
-    suspend fun insertForecastData(forecastData:ForecastData){
-        database.dao.insertForecastData(forecastData)
-    }
-
-     */
 
 }

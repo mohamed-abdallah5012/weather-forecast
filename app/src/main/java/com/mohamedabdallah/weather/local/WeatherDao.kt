@@ -2,9 +2,9 @@ package com.mohamedabdallah.weather.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.mohamedabdallah.weather.data.forecast.ForecastData
-import com.mohamedabdallah.weather.data.model.FavoritePlace
-import com.mohamedabdallah.weather.data.weather.WeatherData
+import com.mohamedabdallah.weather.data.favorite.FavoritePlace
+import com.mohamedabdallah.weather.data.forecast.ForecastResponse
+import com.mohamedabdallah.weather.data.weather.CurrentResponse
 
 @Dao
 interface WeatherDao {
@@ -18,29 +18,25 @@ interface WeatherDao {
     @Query("select * from FavoritePlace ")
     fun getFavoritesPlaces(): LiveData<List<FavoritePlace>>
 
-    /*
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertWeatherData(weatherData: WeatherData)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertForecastData(forecastData: ForecastData)
+    suspend fun saveForecastResponse(item: ForecastResponse)
+
+    @Query("select * from ForecastResponse where lat-:latt<=0.1 and lon-:lngg<=0.1 ")
+    suspend fun getForecastResponse(latt:Double,lngg:Double):ForecastResponse?
+
+    @Query("delete from ForecastResponse where lat-:latt<=0.1 and lon-:lngg<=0.1")
+    suspend fun deleteForecastResponse(latt:Double,lngg:Double)
 
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveCurrentResponse(item: CurrentResponse)
 
-    @Query("select * from WeatherData ")
-    fun getWeatherByCityName(): LiveData<WeatherData>
+    @Query("select * from CurrentResponse where lat is:latt and lon is:lngg ")
+    suspend fun getCurrentResponse(latt:Double,lngg:Double): CurrentResponse?
 
-    @Query("select * from  WeatherData")
-    fun getWeatherByLatLong(): LiveData<WeatherData>
-
-
-    @Query("select * from ForecastData ")
-    fun getWeatherForecastByCityName(): LiveData<ForecastData>
+    @Query("delete from CurrentResponse where lat is:latt and lon is:lngg")
+    suspend fun deleteCurrentResponse(latt:Double,lngg:Double)
 
 
-    @Query("select * from ForecastData ")
-    fun getWeatherForecastByLatLong(): LiveData<ForecastData>
-
-
-     */
 }

@@ -1,5 +1,6 @@
-package com.mohamedabdallah.weather.ui.navigation.home.adapter
+package com.mohamedabdallah.weather.ui.navigation.favorite.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,8 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mohamedabdallah.weather.R
-import com.mohamedabdallah.weather.data.model.FavoritePlace
-import com.mohamedabdallah.weather.ui.navigation.favorite.adapter.FavoriteListAdapter
+import com.mohamedabdallah.weather.data.favorite.FavoritePlace
+import com.mohamedabdallah.weather.utils.loadImageFromStorage
 
 class FavoriteCitiesAdapter(
         private var favoritesPlaces: List<FavoritePlace>,
@@ -18,11 +19,12 @@ class FavoriteCitiesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //TODO bind item
+        val current=favoritesPlaces[position]
         holder.cityName.text=favoritesPlaces[position].name
-        holder.iconUrl.setImageBitmap(favoritesPlaces[position].bitmap)
-
+        Log.i("TAG", "onBindViewHolder: ${current.path}")
+        Log.i("TAG", "onBindViewHolder: ${current.name}.jpg")
+        holder.iconUrl.setImageBitmap(loadImageFromStorage(current.path,"${current.name}.jpg"))
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // TODO createView
 

@@ -50,6 +50,10 @@
     <string name="map">Radar</string>
     <string name="settings">Settings</string>
     <string name="alert_setting">Alerts</string>
+    <string name="choose_mode">Choose Mode</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="notification_on">Notification On</string>
+    <string name="notification_off">Notifications Off</string>
 
 
 </resources>

@@ -2,12 +2,9 @@ package com.mohamedabdallah.weather.ui.navigation.favorite
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.mohamedabdallah.weather.data.model.FavoritePlace
+import com.mohamedabdallah.weather.data.favorite.FavoritePlace
 import com.mohamedabdallah.weather.repo.HomeRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class FavoriteViewModel(application: Application) : AndroidViewModel(application) {
     // TODO: Implement the ViewModel
@@ -15,7 +12,7 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
 
     private val homeRepository = HomeRepository(application)
 
-    fun getFavoritePlaces(): LiveData<List<FavoritePlace>> {
+     fun getFavoritePlaces(): LiveData<List<FavoritePlace>> {
         return homeRepository.getFavoritesPlaces()
     }
     fun deleteFavoritePlace(favoritePlace: FavoritePlace)
@@ -24,4 +21,18 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
             homeRepository.deleteFavoritePlace(favoritePlace)
         }
     }
+
+    fun deleteCurrentResponse(lat:Double,lan:Double)
+    {
+        viewModelScope.launch {
+            homeRepository.deleteCurrentResponse(lat,lan)
+        }
+    }
+    fun deleteForecastResponse(lat:Double,lan:Double)
+    {
+        viewModelScope.launch {
+            homeRepository.deleteForecastResponse(lat,lan)
+        }
+    }
+
 }

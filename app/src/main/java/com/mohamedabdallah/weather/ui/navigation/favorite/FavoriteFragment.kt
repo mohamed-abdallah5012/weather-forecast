@@ -1,6 +1,5 @@
 package com.mohamedabdallah.weather.ui.navigation.favorite
 
-import android.graphics.drawable.AnimationDrawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,13 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mohamedabdallah.weather.R
-import com.mohamedabdallah.weather.data.model.FavoritePlace
+import com.mohamedabdallah.weather.data.favorite.FavoritePlace
 import com.mohamedabdallah.weather.ui.navigation.favorite.adapter.FavoriteListAdapter
-import com.mohamedabdallah.weather.ui.navigation.home.adapter.FavoriteCitiesAdapter
 
 class FavoriteFragment : Fragment(),FavoriteListAdapter.OnEditFavoriteListener {
 

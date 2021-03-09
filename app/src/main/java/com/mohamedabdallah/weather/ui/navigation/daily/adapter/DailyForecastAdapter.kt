@@ -1,19 +1,20 @@
-package com.mohamedabdallah.weather.ui.navigation.home.adapter
+package com.mohamedabdallah.weather.ui.navigation.daily.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.mohamedabdallah.weather.R
-import com.mohamedabdallah.weather.data.forecast.ForecastCustomizedModel
-import com.mohamedabdallah.weather.data.model.FavoritePlace
+import com.mohamedabdallah.weather.data.forecast.Daily
+import com.mohamedabdallah.weather.utils.getDate
+import com.mohamedabdallah.weather.utils.getSunSet
 
 class DailyForecastAdapter(
-        private var dailyForecastList: List<ForecastCustomizedModel>,
+        private var dailyForecastList: List<Daily>,
         private var listener : DailyForecastAdapter.OnDailyForecastListener?
 
 ) :
@@ -22,40 +23,37 @@ class DailyForecastAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //TODO bind item
 
-        val current:ForecastCustomizedModel=dailyForecastList[position]
-        holder.date.text=current.dayOfTheWeek+current.dateOfTheMonth+current.monthOfTheYear
-        holder.temp.text=current.temperature
-        holder.time.text=current.time
+        val current:Daily=dailyForecastList[position]
+        holder.date.text= getDate(current.dt)
+        holder.temp.text=current.temp.day.toString()
+        holder.time.text=getSunSet(current.dt)
         // image
-        when(current.weatherType){
+        when(current.weather[0].main){
 
             holder.itemView.resources.getString(R.string.clouds) -> {
-                holder.cardView.setCardBackgroundColor(R.color.lightBlue)
+                holder.cardView.setCardBackgroundColor(R.color.indianRed)
                 holder.image.setImageResource(R.drawable.ic_cloudy)
 
             }
             holder.itemView.resources.getString(R.string.rain) ->{
-                holder.cardView.setCardBackgroundColor(R.color.lightSlateGray)
+                holder.cardView.setCardBackgroundColor(R.color.indianRed)
                 holder.image.setImageResource(R.drawable.ic_rain)
 
             }
             holder.itemView.resources.getString(R.string.clear) ->{
-                holder.cardView.setCardBackgroundColor(R.color.lightYellow)
+                holder.cardView.setCardBackgroundColor(R.color.indianRed)
                 holder.image.setImageResource(R.drawable.ic_sunny)
 
             }
             holder.itemView.resources.getString(R.string.thunderstorm) ->{
-                holder.cardView.setCardBackgroundColor(R.color.darkSlateBlue)
+                holder.cardView.setCardBackgroundColor(R.color.indianRed)
                 holder.image.setImageResource(R.drawable.ic_thunderstorm)
 
             }
             else -> {
-                holder.cardView.setCardBackgroundColor(R.color.indianRed)
-                //iconDrawable.set(getWeatherIcon(context,""))
+                //holder.weatherIcon.setImageResource(R.drawable.ic_thunderstorm)
             }
         }
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -80,26 +78,26 @@ class DailyForecastAdapter(
         }
 
         override fun onClick(p0: View?) {
-            listener?.onDailyForecastItemClick(dailyForecastList[adapterPosition])
+            listener?.onDailyForecastItemClick(adapterPosition)
         }
 
     }
     interface OnDailyForecastListener
     {
-        fun onDailyForecastItemClick(forcastList: ForecastCustomizedModel)
+        fun onDailyForecastItemClick(id:Int)
     }
 
     override fun getItemCount(): Int {
         return dailyForecastList.size
     }
 
-    fun setData(list: List<ForecastCustomizedModel>) {
+    fun setData(list: List<Daily>) {
         dailyForecastList = list
         notifyDataSetChanged()
 
     }
 
-    fun getData() : List<ForecastCustomizedModel>{
+    fun getData() : List<Daily>{
         return dailyForecastList
     }
 

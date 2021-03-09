@@ -53,6 +53,9 @@
     <string name="settings">الاعدادات</string>
 
     <string name="alert_setting">الاشعارات</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="notification_on">Notification On</string>
+    <string name="notification_off">Notifications Off</string>
 
 
 </resources>

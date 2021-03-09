@@ -1,10 +1,7 @@
-package com.mohamedabdallah.weather.data.model
+package com.mohamedabdallah.weather.data.favorite
 
-import android.graphics.Bitmap
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.google.android.gms.maps.model.LatLng
 
 @Entity
 data class FavoritePlace(
@@ -14,6 +11,6 @@ data class FavoritePlace(
     val address :String,
     val lat: Double,
     val lng: Double,
-    val bitmap :Bitmap
+    val path :String
 ) {
 }

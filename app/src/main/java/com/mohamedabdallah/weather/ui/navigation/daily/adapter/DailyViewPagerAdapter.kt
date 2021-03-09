@@ -5,15 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.mohamedabdallah.weather.R
-import com.mohamedabdallah.weather.data.forecast.ForecastCustomizedModel
-import com.mohamedabdallah.weather.data.model.FavoritePlace
+import com.mohamedabdallah.weather.data.forecast.Daily
+import com.mohamedabdallah.weather.utils.Constant
+import com.mohamedabdallah.weather.utils.getDate
+import com.mohamedabdallah.weather.utils.getSunSet
 
 class DailyViewPagerAdapter(
-        private var list: List<FavoritePlace>
+        private var list: List<Daily>
 ) :
         RecyclerView.Adapter<DailyViewPagerAdapter.ViewHolder>() {
 
@@ -21,20 +21,45 @@ class DailyViewPagerAdapter(
         //TODO bind item
 
 
-        val current:FavoritePlace=list[position]
-        holder.headerDate.text=current.address
-        holder.temperature.text=current.name
-        holder.degreeSymbol.text=current.id
-        holder.mainDesc.text=current.lat.toString()
-        holder.fullDesc.text=current.lng.toString()
-        holder.humidity.text="humidity"
-        holder.pressure.text="pressure"
-        holder.visibility.text="visibility"
-        holder.cloudiness.text="cloudiness"
-        holder.sunset.text="sunset"
-        holder.sunrise.text="sunrise"
+        val current:Daily=list[position]
+        holder.headerDate.text= getDate(current.dt)
+        holder.temperature.text=current.temp.day.toString()
+        var sy="ss"
+        sy = if(Constant.baseUnit=="metric")
+            "C"
+        else "F"
+        holder.degreeSymbol.text=sy
+        holder.mainDesc.text=current.weather[0].main
+        holder.fullDesc.text=current.weather[0].description
+        holder.humidity.text=current.humidity.toString() + " %"
+        holder.pressure.text=current.pressure.toString()
+        holder.visibility.text=current.wind_speed.toString()
+        holder.cloudiness.text=current.clouds.toString() + " %"
+        holder.sunset.text= getSunSet(current.sunset)
+        holder.sunrise.text= getSunSet(current.sunrise)
+        when(current.weather[0].main){
 
-        holder.weatherIcon.setImageResource(R.drawable.ic_sunny)
+            holder.itemView.resources.getString(R.string.clouds) -> {
+                holder.weatherIcon.setImageResource(R.drawable.ic_cloudy)
+
+            }
+            holder.itemView.resources.getString(R.string.rain) ->{
+                holder.weatherIcon.setImageResource(R.drawable.ic_rain)
+
+            }
+            holder.itemView.resources.getString(R.string.clear) ->{
+                holder.weatherIcon.setImageResource(R.drawable.ic_sunny)
+
+            }
+            holder.itemView.resources.getString(R.string.thunderstorm) ->{
+                holder.weatherIcon.setImageResource(R.drawable.ic_thunderstorm)
+
+            }
+            else -> {
+                //holder.weatherIcon.setImageResource(R.drawable.ic_thunderstorm)
+            }
+        }
+
         //holder.image.setImageResource(R.drawable.ic_cloudy)
 
     }
@@ -68,13 +93,13 @@ class DailyViewPagerAdapter(
         return list.size
     }
 
-    fun setData(list: List<FavoritePlace>) {
+    fun setData(list: List<Daily>) {
         this.list = list
         notifyDataSetChanged()
 
     }
 
-    fun getData() : List<FavoritePlace>{
+    fun getData() : List<Daily>{
         return list
     }
 
