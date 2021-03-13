@@ -1,20 +1,15 @@
 package com.mohamedabdallah.weather.ui.navigation.settings
 
-import android.content.SharedPreferences
-import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
-import android.preference.Preference
+import android.view.View
 import androidx.core.app.ActivityCompat
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.findNavController
 import androidx.preference.CheckBoxPreference
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
 import com.mohamedabdallah.weather.R
-import com.mohamedabdallah.weather.ui.activity.MainActivity
-import com.mohamedabdallah.weather.ui.navigation.alert.AlertFragment
-import com.mohamedabdallah.weather.ui.navigation.favorite.FavoriteFragment
 import java.util.*
 
 
@@ -22,6 +17,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
+
+        val view:View?=parentFragment?.view
+        view?.setBackgroundColor(R.drawable.back_list)
 
         darkMode()
         language()
@@ -66,17 +64,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
         resources.updateConfiguration(config, resources.displayMetrics)
     }
 
-
     private fun navigateToNotification() {
 
         val notification = findPreference<androidx.preference.Preference>("notification")
         notification?.setOnPreferenceClickListener {
             if (it.key=="notification")
             {
-                parentFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragment, AlertFragment())
-                    .commit()
+                view?.findNavController()?.navigate(R.id.alertFragment)
             }
             true
         }

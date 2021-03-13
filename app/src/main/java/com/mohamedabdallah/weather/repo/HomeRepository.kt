@@ -22,8 +22,10 @@ class HomeRepository(application: Application) {
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
-    private var currentResponse:MutableLiveData<CurrentResponse>? = MutableLiveData<CurrentResponse>()
-    private var forecastResponse:MutableLiveData<ForecastResponse>? = MutableLiveData<ForecastResponse>()
+    private var currentResponse: MutableLiveData<CurrentResponse>? =
+        MutableLiveData<CurrentResponse>()
+    private var forecastResponse: MutableLiveData<ForecastResponse>? =
+        MutableLiveData<ForecastResponse>()
 
 
     fun getWeatherByLatLong(
@@ -35,7 +37,7 @@ class HomeRepository(application: Application) {
     ):
             MutableLiveData<CurrentResponse>? {
         uiScope.launch(Dispatchers.Main) {
-            currentResponse?.value=getCurrentFromLocal(latitude,longitude)
+            currentResponse?.value = getCurrentFromLocal(latitude, longitude)
 
             try {
                 val response = remote.getWeatherByLatLong(latitude, longitude, appId, lang, unit)
@@ -47,8 +49,8 @@ class HomeRepository(application: Application) {
                         response.body()!!.currentResponseId =
                             latitude.toString() + longitude.toString()
                     }
-                    response.body()!!.coord.lat=latitude
-                    response.body()!!.coord.lon=longitude
+                    response.body()!!.coord.lat = latitude
+                    response.body()!!.coord.lon = longitude
 
                     response.body()?.let { local.saveCurrentResponse(response.body()!!) }
                 } else {
@@ -72,7 +74,7 @@ class HomeRepository(application: Application) {
             MutableLiveData<ForecastResponse>? {
 
         uiScope.launch(Dispatchers.Main) {
-            forecastResponse?.value=getForecastFromLocal(latitude,longitude)
+            forecastResponse?.value = getForecastFromLocal(latitude, longitude)
             try {
                 val response = remote.getForecastOneApi(latitude, longitude, appId, lang, unit)
                 if (response.isSuccessful) {
@@ -83,8 +85,8 @@ class HomeRepository(application: Application) {
                         response.body()!!.forecastResponseId =
                             latitude.toString() + longitude.toString()
                     }
-                    response.body()!!.lat=latitude
-                    response.body()!!.lon=longitude
+                    response.body()!!.lat = latitude
+                    response.body()!!.lon = longitude
                     response.body()?.let { local.saveForecastResponse(it) }
                 } else {
                     Log.i("TAG", "Get Message: ${response.message()}")
@@ -95,16 +97,15 @@ class HomeRepository(application: Application) {
             }
         }
 
-        //return local.getForecastResponse(latitude, longitude)
         return forecastResponse
     }
 
     suspend fun deleteCurrentResponse(lat: Double, lon: Double) {
-            local.deleteCurrentResponse(lat, lon)
+        local.deleteCurrentResponse(lat, lon)
     }
 
     suspend fun deleteForecastResponse(lat: Double, lon: Double) {
-            local.deleteForecastResponse(lat, lon)
+        local.deleteForecastResponse(lat, lon)
     }
 
     fun addFavoritePlace(favoritePlace: FavoritePlace) {
@@ -112,47 +113,48 @@ class HomeRepository(application: Application) {
             local.addFavoritePlace(favoritePlace)
         }
     }
+
     suspend fun deleteFavoritePlace(favoritePlace: FavoritePlace) {
-            local.deleteFavoritePlace(favoritePlace)
+        local.deleteFavoritePlace(favoritePlace)
     }
+
     fun getFavoritesPlaces(): LiveData<List<FavoritePlace>> {
         return local.getFavoritesPlaces()
     }
-    private suspend fun getCurrentFromLocal(lat:Double,lng:Double):CurrentResponse? {
+
+    private suspend fun getCurrentFromLocal(lat: Double, lng: Double): CurrentResponse? {
         return local.getCurrentResponse(lat, lng)
     }
-    private suspend fun getForecastFromLocal(lat:Double, lng:Double):ForecastResponse? {
+
+    private suspend fun getForecastFromLocal(lat: Double, lng: Double): ForecastResponse? {
         return local.getForecastResponse(lat, lng)
     }
 
-    fun getWeatherAlert(lat:Double,lng:Double,type:String):Boolean
-    {
-        var key=false
+    fun getWeatherAlert(lat: Double, lng: Double, type: String): Boolean {
+        var key = false
         runBlocking {
-
-            uiScope.launch(Dispatchers.Main) {
-                var ccc=getCurrentFromLocal(lat,lng)
+            uiScope.launch(Dispatchers.IO) {
+                var ccc = getCurrentFromLocal(lat, lng)
                 try {
-                    val response = remote.getWeatherByLatLong(lat, lng, Constant.appID, Constant.api_lang, Constant.baseUnit)
+                    val response = remote.getWeatherByLatLong(
+                        lat,
+                        lng,
+                        Constant.appID,
+                        Constant.api_lang,
+                        Constant.baseUnit
+                    )
                     if (response.isSuccessful) {
-
-                        //currentResponse?.value = response.body()
-                        ccc=response.body()
-
-                        /*if (lat == Constant.myLat && lng == Constant.myLon) {
-                            response.body()!!.currentResponseId = "myLocation"
+                        ccc = response.body()
+                        if (lat == Constant.myLat && lng == Constant.myLon) {
+                            ccc!!.currentResponseId = "myLocation"
                         } else {
-                            response.body()!!.currentResponseId =
+                            ccc!!.currentResponseId =
                                 lat.toString() + lng.toString()
                         }
-                        response.body()!!.coord.lat=lat
-                        response.body()!!.coord.lon=lng
-                        */
+                        ccc!!.coord.lat = lat
+                        ccc!!.coord.lon = lng
 
-                        ccc!!.currentResponseId = lat.toString() + lng.toString()
-                        Log.i("TAG", "inside api")
                         ccc.let { local.saveCurrentResponse(ccc!!) }
-
 
                     } else {
                         Log.i("TAG", "Get Message: ${response.message()}")
@@ -160,16 +162,15 @@ class HomeRepository(application: Application) {
                 } catch (exception: Exception) {
                     Log.i("TAG", ": $exception")
                 }
-
-                if (ccc?.weather?.get(0)?.main?.toUpperCase()==type.toUpperCase())
-                    key=true
+                if (ccc?.weather?.get(0)?.main?.toUpperCase() == type.toUpperCase())
+                    key = true
                 Log.i("TAG", "hffffffff: ${ccc?.weather?.get(0)?.main?.toUpperCase()}")
                 Log.i("TAG", "hffffffffjjj: ${type.toUpperCase()}")
 
             }.join()
 
         }
-        return key;
+        return key
     }
 
 }

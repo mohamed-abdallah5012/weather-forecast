@@ -1,12 +1,16 @@
 package com.mohamedabdallah.weather.utils
 
-import android.R
-import android.app.Application
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import java.io.*
+import android.util.Log
+import android.view.View
+import android.view.animation.Animation
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,35 +25,6 @@ fun getDate(date: String): StringBuilder {
     val month = cal[Calendar.MONTH] - 1
     val day = cal[Calendar.DAY_OF_MONTH]
     return StringBuilder().append(year).append(" ").append(month).append(" ").append(day)
-}
-fun getDayOfTheWeek(date: String): String {
-    // MON
-    val date = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(date)
-    var simpleDateFormat = SimpleDateFormat("EEE")
-    return simpleDateFormat.format(date).toUpperCase()
-}
-
-fun getMonthOfTheYear(date: String): String {
-    // JUNE
-    val date = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(date)
-    var simpleDateFormat = SimpleDateFormat("MMMM")
-    return simpleDateFormat.format(date).toUpperCase()
-}
-
-fun getDateOfTheMonth(date: String): Int {
-    // 23
-    val date = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(date)
-    val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-    cal.time = date
-    return cal[Calendar.DAY_OF_MONTH]
-}
-
-fun getTime(date: String): String {
-    val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-    val outputFormat: DateFormat =
-        SimpleDateFormat("hh:mm a")
-    return outputFormat.format(inputFormat.parse(date))
-
 }
 fun getSunSet(value:Long):String{
 
@@ -102,4 +77,117 @@ fun loadImageFromStorage(path: String,name:String):Bitmap {
         val b = BitmapFactory.decodeStream(FileInputStream(f))
        return b
     }
+
+fun getLiveWeekDays():LinkedHashMap<Int, Boolean>
+{
+    val calendar = Calendar.getInstance()
+    var map: LinkedHashMap<Int, Boolean> = LinkedHashMap()
+
+
+    when (calendar[Calendar.DAY_OF_WEEK]) {
+        Calendar.SUNDAY -> {
+            map[Calendar.MONDAY] = true
+            map[Calendar.TUESDAY] = false
+            map[Calendar.WEDNESDAY] = false
+            map[Calendar.THURSDAY] = false
+            map[Calendar.FRIDAY] = false
+            map[Calendar.SATURDAY] = false
+            map[Calendar.SUNDAY] = false
+        }
+        Calendar.MONDAY -> {
+            map[Calendar.TUESDAY] = true
+            map[Calendar.WEDNESDAY] = false
+            map[Calendar.THURSDAY] = false
+            map[Calendar.FRIDAY] = false
+            map[Calendar.SATURDAY] = false
+            map[Calendar.SUNDAY] = false
+            map[Calendar.MONDAY] = false
+        }
+        Calendar.TUESDAY -> {
+            map[Calendar.WEDNESDAY] = true
+            map[Calendar.THURSDAY] = false
+            map[Calendar.FRIDAY] = false
+            map[Calendar.SATURDAY] = false
+            map[Calendar.SUNDAY] = false
+            map[Calendar.MONDAY] = false
+            map[Calendar.TUESDAY] = false
+
+        }
+        Calendar.WEDNESDAY -> {
+            map[Calendar.THURSDAY] = true
+            map[Calendar.FRIDAY] = false
+            map[Calendar.SATURDAY] = false
+            map[Calendar.SUNDAY] = false
+            map[Calendar.MONDAY] = false
+            map[Calendar.TUESDAY] = false
+            map[Calendar.WEDNESDAY] = false
+
+        }
+        Calendar.THURSDAY -> {
+            map[Calendar.FRIDAY] = true
+            map[Calendar.SATURDAY] = false
+            map[Calendar.SUNDAY] = false
+            map[Calendar.MONDAY] = false
+            map[Calendar.TUESDAY] = false
+            map[Calendar.WEDNESDAY] = false
+            map[Calendar.THURSDAY] = false
+        }
+        Calendar.FRIDAY -> {
+            map[Calendar.SATURDAY] = true
+            map[Calendar.SUNDAY] = false
+            map[Calendar.MONDAY] = false
+            map[Calendar.TUESDAY] = false
+            map[Calendar.WEDNESDAY] = false
+            map[Calendar.THURSDAY] = false
+            map[Calendar.FRIDAY] = false
+
+
+        }
+        Calendar.SATURDAY -> {
+            map[Calendar.SUNDAY] = true
+            map[Calendar.MONDAY] = false
+            map[Calendar.TUESDAY] = false
+            map[Calendar.WEDNESDAY] = false
+            map[Calendar.THURSDAY] = false
+            map[Calendar.FRIDAY] = false
+            map[Calendar.SATURDAY] = false
+
+        }
+    }
+return map
+}
+
+fun calcTTTTTTTTTTTTTTTTTTTTTTT(incoming :List<Int>): List<Int> {
+
+    var result= incoming.toMutableList()
+    val calendar = Calendar.getInstance()
+    val today:Int=calendar[Calendar.DAY_OF_WEEK]
+    for (i in incoming.indices)
+    {
+        when {
+            today ==incoming[i] -> {
+                result[i]=7
+            }
+            today <incoming[i] -> {
+               result[i]=incoming[i]-today
+            }
+            today >incoming[i] -> {
+                result[i]=incoming[i]+7-today
+            }
+        }
+    }
+    return result
+
+}
+
+fun View.startAnimation(animation: Animation, onEnd: () -> Unit) {
+    animation.setAnimationListener(object : Animation.AnimationListener {
+        override fun onAnimationStart(animation: Animation?) = Unit
+        override fun onAnimationEnd(animation: Animation?) {
+            onEnd()
+        }
+        override fun onAnimationRepeat(animation: Animation?) = Unit
+    })
+    this.startAnimation(animation)
+}
 

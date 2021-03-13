@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextClock
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -27,11 +28,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPhotoRequest
-import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
@@ -47,7 +46,6 @@ import com.mohamedabdallah.weather.ui.navigation.favorite.adapter.FavoriteListAd
 import com.mohamedabdallah.weather.ui.navigation.home.adapter.HourlyForecastAdapter
 import com.mohamedabdallah.weather.utils.*
 import java.io.IOException
-import java.util.*
 
 class HomeFragment : Fragment(),
     FavoriteCitiesAdapter.OnFavoritePlaceListener,
@@ -82,7 +80,7 @@ class HomeFragment : Fragment(),
     private lateinit var mainStateview: ImageView
     private lateinit var weatherIcon: ImageView
     private lateinit var tvDate: TextView
-    private lateinit var tvHour: TextView
+    private lateinit var tvHour: TextClock
     private lateinit var locationName: TextView
     private lateinit var locationIcon: ImageView
     private lateinit var degreesymbol: TextView
@@ -178,13 +176,13 @@ class HomeFragment : Fragment(),
 
     override fun onStart() {
         super.onStart()
-        getMyLocation()
+        //getMyLocation()
     }
 
     private fun navigateToFavoriteFragment() {
         parentFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment, FavoriteFragment())
+            .replace(R.id.nav_host_fragment, FavoriteFragment())
             .commit()
     }
 
@@ -232,7 +230,6 @@ class HomeFragment : Fragment(),
 
 
         tvDate.text = getCurrentDate()
-        tvHour.text = getCurrentTime()
 
     }
 
@@ -245,7 +242,7 @@ class HomeFragment : Fragment(),
 
     private fun showLocationIsDisabledAlert() {
 
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context!!)
+        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
 
         builder.setMessage("Turn on Location Services ?")
             .setCancelable(false)
@@ -263,7 +260,7 @@ class HomeFragment : Fragment(),
 
     private fun getMyLocation() {
         checkForPermission()
-        if (!isLocationEnabled(context!!)) {
+        if (!isLocationEnabled(requireContext())) {
             showLocationIsDisabledAlert()
         } else {
 
@@ -345,16 +342,16 @@ class HomeFragment : Fragment(),
     private fun checkForPermission() {
 
         if (ActivityCompat.checkSelfPermission(
-                context!!,
+                requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(
-                context!!,
+                requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
-                activity!!,
+                requireActivity(),
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ),
@@ -463,7 +460,7 @@ class HomeFragment : Fragment(),
         windSpeed.text = it.wind?.speed.toString()
         mainState.text = it.weather[0].main
         humidity.text = it.main?.humidity.toString() + " %"
-        pressure.text = it.main?.pressure.toString()
+        pressure.text = it.main?.pressure.toString() +" mbar"
 
         sunset.text = getSunSet(it.sys!!.sunset)
         sunrise.text = getSunSet(it.sys!!.sunrise)

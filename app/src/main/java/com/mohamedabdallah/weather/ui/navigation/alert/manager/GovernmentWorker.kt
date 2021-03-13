@@ -7,7 +7,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
@@ -24,35 +23,30 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.mohamedabdallah.weather.repo.AlertRepo
 import com.mohamedabdallah.weather.repo.HomeRepository
 import com.mohamedabdallah.weather.ui.navigation.home.HomeViewModel
 import com.mohamedabdallah.weather.utils.Constant
 import kotlinx.coroutines.delay
 
 
-class AlertWorker(context: Context,workerParams: WorkerParameters) :Worker(context, workerParams){
+class GovernmentWorker(context: Context, workerParams: WorkerParameters) :Worker(context, workerParams){
 
-    private val homeRepository = HomeRepository(Application())
+    private val alertRepo = AlertRepo(Application())
     override fun doWork(): Result {
 
-        // Log.i("TAG", "doWork: $i")
-        val type=inputData.getString("type")
-        val lat=inputData.getDouble("lat",0.0)
-        val lng=inputData.getDouble("lng",0.0)
-
-        val x= homeRepository.getWeatherAlert(lat,lng,type!! )
-        if (x)
-            {
-                Log.i("TAG", "doWork: ssssssssssssssss")
-                createNotificationChannels()
-                sendOnChannel2(type)
-            }
+        val x=alertRepo.getGovernmentAlert(Constant.myLat,Constant.myLon)
+        if (x.isNullOrEmpty())
+        {
+            // TODO: 3/11/2021
+        }
         else
-            Log.i("TAG", "doWork: ffffffffffffffffff")
-
+        {
+            createNotificationChannels()
+            sendOnChannel2(x[0].description)
+        }
         return Result.success()
     }
-
     private  fun createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel1 = NotificationChannel(
@@ -84,11 +78,5 @@ class AlertWorker(context: Context,workerParams: WorkerParameters) :Worker(conte
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
         notificationManager.notify(2, notification)
-        if (Constant.notification)
-        {
-            val  player=MediaPlayer.create(applicationContext,com.mohamedabdallah.weather.R.raw.alert)
-            player.start()
-        }
-
     }
 }

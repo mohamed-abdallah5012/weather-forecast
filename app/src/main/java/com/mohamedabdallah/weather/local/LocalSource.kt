@@ -3,9 +3,11 @@ package com.mohamedabdallah.weather.local
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
+import com.mohamedabdallah.weather.data.alert.AlertResponse
 import com.mohamedabdallah.weather.data.favorite.FavoritePlace
 import com.mohamedabdallah.weather.data.forecast.ForecastResponse
 import com.mohamedabdallah.weather.data.weather.CurrentResponse
+import kotlinx.coroutines.runBlocking
 
 class LocalSource (application:Application) {
 
@@ -40,6 +42,18 @@ class LocalSource (application:Application) {
     }
     suspend fun deleteCurrentResponse(lat:Double,lng:Double){
         database.dao.deleteCurrentResponse(lat,lng)
+    }
+
+    suspend fun deleteAlertItem(item:Long)
+    {
+        database.dao.deleteAlertItem(item)
+    }
+    fun addAlertList(alert: AlertResponse):Long
+    {
+        return database.dao.addAlertList(alert)
+    }
+    fun getAlertList(): LiveData<List<AlertResponse>> {
+        return database.dao.getAlertList()
     }
 
 

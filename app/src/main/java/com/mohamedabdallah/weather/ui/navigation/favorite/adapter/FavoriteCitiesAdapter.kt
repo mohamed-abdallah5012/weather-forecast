@@ -21,8 +21,6 @@ class FavoriteCitiesAdapter(
         //TODO bind item
         val current=favoritesPlaces[position]
         holder.cityName.text=favoritesPlaces[position].name
-        Log.i("TAG", "onBindViewHolder: ${current.path}")
-        Log.i("TAG", "onBindViewHolder: ${current.name}.jpg")
         holder.iconUrl.setImageBitmap(loadImageFromStorage(current.path,"${current.name}.jpg"))
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

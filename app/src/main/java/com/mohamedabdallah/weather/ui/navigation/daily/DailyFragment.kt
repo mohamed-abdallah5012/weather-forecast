@@ -17,10 +17,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mohamedabdallah.weather.R
 import com.mohamedabdallah.weather.ui.navigation.daily.adapter.DailyForecastAdapter
 import com.mohamedabdallah.weather.ui.navigation.daily.adapter.DailyViewPagerAdapter
-import com.mohamedabdallah.weather.ui.navigation.home.HomeViewModel
 import com.mohamedabdallah.weather.utils.Constant
 
-class DailyFragment : Fragment(),com.mohamedabdallah.weather.ui.navigation.daily.adapter.DailyForecastAdapter.OnDailyForecastListener{
+class DailyFragment : Fragment(),DailyForecastAdapter.OnDailyForecastListener{
 
     companion object {
         fun newInstance() =

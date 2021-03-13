@@ -2,6 +2,7 @@ package com.mohamedabdallah.weather.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.mohamedabdallah.weather.data.alert.AlertResponse
 import com.mohamedabdallah.weather.data.favorite.FavoritePlace
 import com.mohamedabdallah.weather.data.forecast.ForecastResponse
 import com.mohamedabdallah.weather.data.weather.CurrentResponse
@@ -18,6 +19,9 @@ interface WeatherDao {
     @Query("select * from FavoritePlace ")
     fun getFavoritesPlaces(): LiveData<List<FavoritePlace>>
 
+   /////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+     ///////////////////////////////////////////////////////////
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveForecastResponse(item: ForecastResponse)
@@ -37,6 +41,20 @@ interface WeatherDao {
 
     @Query("delete from CurrentResponse where lat is:latt and lon is:lngg")
     suspend fun deleteCurrentResponse(latt:Double,lngg:Double)
+
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addAlertList(alert: AlertResponse):Long
+
+    //@Query("update AlertResponse where id")
+    //suspend fun updateAlert(alert: AlertResponse)
+
+    @Query("delete from AlertResponse where id is :id")
+    suspend fun deleteAlertItem(id: Long)
+
+    @Query("select * from AlertResponse ")
+    fun getAlertList(): LiveData<List<AlertResponse>>
 
 
 }

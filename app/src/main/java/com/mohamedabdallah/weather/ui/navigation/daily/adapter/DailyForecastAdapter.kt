@@ -1,6 +1,5 @@
 package com.mohamedabdallah.weather.ui.navigation.daily.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.mohamedabdallah.weather.R
 import com.mohamedabdallah.weather.data.forecast.Daily
+import com.mohamedabdallah.weather.ui.navigation.alert.adapter.AlertAdapter
 import com.mohamedabdallah.weather.utils.getDate
 import com.mohamedabdallah.weather.utils.getSunSet
 

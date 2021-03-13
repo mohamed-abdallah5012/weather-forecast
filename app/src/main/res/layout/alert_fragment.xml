@@ -1,263 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.navigation.alert.AlertFragment">
-
-    <androidx.core.widget.NestedScrollView
+    android:background="@drawable/back2">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="0dp"
+        android:elevation="10dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card2"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="100dp"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_baseline_map_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/card3"
-                tools:ignore="MissingConstraints" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card1"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="0dp"
-                app:cardCornerRadius="10dp"
-                android:elevation="10dp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                android:background="@drawable/back2"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:weightSum="10">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tv_notification_on_off"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/border"
-                    android:orientation="vertical">
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:text="@string/notification_on"
+                    android:textColor="@color/white"
+                    android:textDirection="locale"
+                    android:textSize="16dp" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:background="@drawable/back2"
-                        android:orientation="horizontal"
-                        android:weightSum="10">
-
-                        <TextView
-                            android:id="@+id/tv_notification_on_off"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:paddingStart="20dp"
-                            android:textColor="@color/white"
-                            android:textSize="16dp"
-                            android:text="@string/notification_on"
-                            android:textDirection="locale"
-                            android:layout_weight="2"/>
-
-                        <Switch
-                            android:layout_marginTop="1dp"
-                            android:id="@+id/sw_notification_on_off"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:checked="false"
-                            android:layout_marginEnd="1dp"
-                            android:layout_gravity="end"
-                            android:layout_weight="8"/>
-
-                    </LinearLayout>
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="10dp"
-                android:elevation="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/card1"
-                app:layout_constraintStart_toStartOf="parent">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <LinearLayout
-                        android:id="@+id/dddd1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5.0dip"
-                        android:layout_marginBottom="1dp"
-                        android:background="@drawable/border"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_notification_type"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:textColor="@color/white"
-                            android:paddingStart="10dp"
-                            android:text="Notification Type"
-                            android:textStyle="bold" />
-
-                        <RadioGroup
-                            android:id="@+id/rg_notification_type"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingStart="10dp"
-                            android:textColor="@color/white"
-                            android:orientation="horizontal"
-                            android:layout_weight="2">
-
-                            <RadioButton
-                                android:id="@+id/with_sound"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/white"
-                                android:text="With Sound"
-                                android:layout_weight="1"/>
-
-                            <RadioButton
-                                android:id="@+id/without_sound"
-                                android:layout_width="wrap_content"
-                                android:textColor="@color/white"
-                                android:layout_height="wrap_content"
-                                android:text="Without Sound"
-                                android:layout_weight="1"/>
-
-                        </RadioGroup>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/dddd2"
-                        android:layout_below="@id/dddd1"
-                        android:layout_width="250dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/border"
-                        android:layout_margin="1dp"
-                        android:orientation="vertical">
-                        <TextView
-                                android:id="@+id/tv_for_next"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:gravity="center_vertical"
-                            android:paddingStart="10dp"
-                            android:text="For Next"
-                                android:textStyle="bold" />
-
-                        <RadioGroup
-                                android:id="@+id/rg_notification_type1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                            android:paddingStart="10dp"
-
-                            android:orientation="horizontal"
-                                android:layout_weight="3">
-                            <RadioButton
-                                    android:id="@+id/with_sound1"
-                                    android:layout_width="wrap_content"
-                                android:textColor="@color/white"
-                                android:layout_height="wrap_content"
-                                    android:text="24H"
-                                    android:layout_weight="1"/>
-
-                            <RadioButton
-                                    android:id="@+id/without_sound1"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                android:textColor="@color/white"
-                                android:text="48H"
-                                    android:layout_weight="1"/>
-                            <RadioButton
-                                android:id="@+id/three_sound1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/white"
-                                android:text="72H"
-                                android:layout_weight="1"/>
-
-                            </RadioGroup>
-                        </LinearLayout>
-                    <LinearLayout
-                        android:layout_below="@id/dddd1"
-                        android:layout_toEndOf="@id/dddd2"
-                        android:layout_width="200dp"
-                        android:layout_margin="1dp"
-                        android:background="@drawable/border"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:weightSum="5">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:layout_gravity="center"
-                            android:text="check_event _at "
-                            android:textStyle="bold" />
-
-                        <Button
-                            android:id="@+id/bt_check_events"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="00:00"/>
-                    </LinearLayout>
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="10dp"
-                android:elevation="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/card2"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/cities_recycler_view"
+                <Switch
+                    android:id="@+id/sw_notification_on_off"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"/>
+                    android:layout_gravity="end"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="1dp"
+                    android:layout_weight="8"
+                    android:checked="false"
+                    android:gravity="center_vertical"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:elevation="10dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@id/card33"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/card1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/back2"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:id="@+id/tv_government_on_off"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:text="Government Issued Alerts"
+                    android:textColor="@color/white"
+                    android:textDirection="locale"
+                    android:textSize="16dp" />
+
+                <Switch
+                    android:id="@+id/sw_government_on_off"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="1dp"
+                    android:layout_weight="8"
+                    android:checked="false"
+                    android:gravity="center_vertical"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card33"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:elevation="10dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card2">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/dddd1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/back2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_notification_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:text="Notification Mode"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <RadioGroup
+                    android:id="@+id/rg_notification_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal"
+                    android:paddingStart="15dp"
+                    android:textColor="@color/white">
+
+                    <RadioButton
+                        android:id="@+id/without_sound"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Silent Mode"
+                        android:textColor="@color/white" />
+
+                    <RadioButton
+                        android:id="@+id/with_sound"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="false"
+                        android:text="With Sound"
+                        android:textColor="@color/white" />
+
+                </RadioGroup>
+            </LinearLayout>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:elevation="3dp"
+        app:cardCornerRadius="13dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card33">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/alert_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/disable_grey"
+            android:visibility="gone" />
+    </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_to_add_alert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/purple_500"
+            android:src="@drawable/ic_baseline_alarm_add_24"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/white" />
 
 
-            </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.core.widget.NestedScrollView>
-
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

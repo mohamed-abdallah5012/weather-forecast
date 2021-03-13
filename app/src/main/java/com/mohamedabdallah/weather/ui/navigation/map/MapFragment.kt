@@ -1,20 +1,21 @@
 package com.mohamedabdallah.weather.ui.navigation.map
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.ProgressBar
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mohamedabdallah.weather.R
 import com.mohamedabdallah.weather.utils.Constant
@@ -27,7 +28,7 @@ class MapFragment : Fragment() {
     private lateinit var webView: WebView
     private lateinit var fab: FloatingActionButton
     private lateinit var progressBar: ProgressBar
-
+    private lateinit var chipsModes: ChipGroup
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -35,6 +36,7 @@ class MapFragment : Fragment() {
         val view = inflater.inflate(R.layout.map_fragment, container, false)
         webView = view.findViewById(R.id.mapView)
         fab = view.findViewById(R.id.fab)
+        chipsModes = view.findViewById(R.id.chips_map_modes)
         progressBar = view.findViewById(R.id.progress_map)
 
 
@@ -61,11 +63,10 @@ class MapFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MapViewModel::class.java)
 
-        fab.setOnClickListener { //showAlertDialog()
-            initializeDialog() }
-
+        fab.setOnClickListener { showAlertDialog()}
         showProgressBar()
         initMap()
+        initMapModes()
 
     }
     private fun showProgressBar() {
@@ -76,13 +77,25 @@ class MapFragment : Fragment() {
                 progressBar.visibility = View.VISIBLE
         })
     }
+    @SuppressLint("SetJavaScriptEnabled")
     private fun initMap() {
         viewModel.currentMode.observe(viewLifecycleOwner, Observer {
             webView.webViewClient = WebViewClient()
             webView.loadUrl("${Constant.radarUrl}${Constant.radarUrlExtension}?lat=${Constant.currentLat}&lng=${Constant.currentLon}&overlay=${it}&application_id=${Constant.radarAppID}")
-            webView.settings.javaScriptEnabled = true
             webView.settings.setSupportZoom(true)
+            webView.settings.javaScriptEnabled = true
         })
+    }
+    private fun initMapModes() {
+        for (text in  viewModel.getAvailableModes()) {
+            val chip = layoutInflater.inflate(R.layout.layout_chip_entry, chipsModes, false) as Chip
+            chip.text = text
+            chip.setOnClickListener {
+                viewModel.setCurrentMode(chip.text.toString())
+                initMap()
+            }
+            chipsModes.addView(chip)
+        }
     }
     private fun showAlertDialog() {
         val choices = viewModel.getAvailableModes()
@@ -92,6 +105,7 @@ class MapFragment : Fragment() {
             { dialogInterface, i ->
                 dialogInterface.cancel()
                 viewModel.setCurrentMode(choices[i])
+                Log.i("TAG", "showAlertDialog: ${choices[i]}")
                 initMap()
             }
         val alertDialog = alertDialogBuilder.create()

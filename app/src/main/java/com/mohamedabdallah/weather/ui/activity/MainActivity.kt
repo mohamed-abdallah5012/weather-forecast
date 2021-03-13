@@ -1,7 +1,9 @@
 package com.mohamedabdallah.weather.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.drawable.AnimationDrawable
 import android.net.ConnectivityManager
 import android.net.ConnectivityManager.NetworkCallback
 import android.net.Network
@@ -14,7 +16,13 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.LiveData
+import androidx.navigation.NavHostController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mohamedabdallah.weather.R
@@ -27,62 +35,56 @@ import com.mohamedabdallah.weather.utils.InternetConnection
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var internetConnection: InternetConnection
-    private lateinit var txt_internet:TextView
+    private lateinit var txtInternet:TextView
+    private lateinit var animationDrawable: AnimationDrawable
+    private lateinit var constraintLayout: CoordinatorLayout
 
+
+    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadSettings()
         setContentView(R.layout.activity_main)
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation)
-        txt_internet = findViewById(R.id.txt_internet)
-        bottomNavigationView.setOnNavigationItemSelectedListener(listener)
+        constraintLayout=findViewById(R.id.main_acti)
+        animationDrawable= constraintLayout.background as AnimationDrawable
+
+        animationDrawable.apply {
+            setEnterFadeDuration(1000)
+            setExitFadeDuration(2000)
+            start()
+        }
+
+         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+         val navController =findNavController(R.id.nav_host_fragment)
+         bottomNavigationView.setupWithNavController(navController)
+
+
+
+        // val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        //val navController = navHostFragment.findNavController() as NavHostController
+
+
+
+
+        txtInternet = findViewById(R.id.txt_internet)
         internetConnection= InternetConnection(this)
-
-
-        if (savedInstanceState == null)
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment, HomeFragment()).commit()
 
         internetConnection.observe(this, androidx.lifecycle.Observer {
             if (!it)
             {
-                txt_internet.visibility= View.VISIBLE
-                txt_internet.isSelected=true
-                txt_internet.text=resources.getString(R.string.no_internet)
+                txtInternet.visibility= View.VISIBLE
+                txtInternet.isSelected=true
+                txtInternet.text=resources.getString(R.string.no_internet)
             }
             else
             {
-                txt_internet.visibility= View.GONE
-
+                txtInternet.visibility= View.GONE
             }
         })
     }
-
-    private val listener =
-        BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId)
-            {
-                R.id.bottom_today ->{supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment, HomeFragment()).commit()
-                }
-                R.id.bottom_map -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment, MapFragment()).commit()
-
-                R.id.bottom_daily -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment, DailyFragment()).commit()
-
-                R.id.bottom_settings -> supportFragmentManager.beginTransaction()
-                   .replace(R.id.fragment, SettingsFragment()).commit()
-
-
-                else -> {}
-            }
-            true
-        }
-
     private fun setLocale(lng: String) {
         val locale = Locale(lng)
         Locale.setDefault(locale)

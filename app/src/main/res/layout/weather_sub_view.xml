@@ -35,7 +35,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:textSize="14.0sp" />
+                        android:textSize="15.0sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -45,17 +45,15 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <TextClock
                         android:id="@+id/tvHour"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:ellipsize="end"
-                        android:text=""
                         android:maxLines="1"
                         android:textColor="@color/white"
-                        android:textSize="18dp"
-                        android:typeface="serif"/>
+                        android:format12Hour="hh:mm a"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -99,7 +97,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentTop="true"
-                            android:layout_marginTop="12dp"
+                            android:layout_marginTop="15dp"
                             android:id="@+id/oooo"
                             android:textColor="@color/white"
                             android:textSize="10dp" />

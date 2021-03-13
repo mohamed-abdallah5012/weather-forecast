@@ -7,6 +7,7 @@ import com.mohamedabdallah.weather.data.weather.*
 import com.mohamedabdallah.weather.data.forecast.Alert
 import com.mohamedabdallah.weather.data.forecast.Daily
 import com.mohamedabdallah.weather.data.forecast.Hourly
+import java.util.*
 
 
 class Converters {
@@ -135,6 +136,29 @@ class Converters {
         return Gson().fromJson(value,Wind::class.java)
     }
 
+    @TypeConverter
+    fun fromUUID(list: List<UUID>): String {
+        val gson = Gson()
+        return gson.toJson(list)
+    }
+
+    @TypeConverter
+    fun toUUID(value: String): List<UUID> {
+        val listType = object : TypeToken<List<UUID>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromSelectedDays(list: List<Int>): String {
+        val gson = Gson()
+        return gson.toJson(list)
+    }
+
+    @TypeConverter
+    fun toSelectedDays(value: String): List<Int> {
+        val listType = object : TypeToken<List<Int>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
 
 
     @TypeConverter

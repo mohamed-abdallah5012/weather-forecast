@@ -32,8 +32,8 @@ class DailyViewPagerAdapter(
         holder.mainDesc.text=current.weather[0].main
         holder.fullDesc.text=current.weather[0].description
         holder.humidity.text=current.humidity.toString() + " %"
-        holder.pressure.text=current.pressure.toString()
-        holder.visibility.text=current.wind_speed.toString()
+        holder.pressure.text=current.pressure.toString()+" mbar"
+        holder.visibility.text=current.wind_speed.toString()+" m"
         holder.cloudiness.text=current.clouds.toString() + " %"
         holder.sunset.text= getSunSet(current.sunset)
         holder.sunrise.text= getSunSet(current.sunrise)

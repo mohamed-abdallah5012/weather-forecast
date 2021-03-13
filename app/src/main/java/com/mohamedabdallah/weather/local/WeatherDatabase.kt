@@ -5,11 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.mohamedabdallah.weather.data.alert.AlertResponse
 import com.mohamedabdallah.weather.data.favorite.FavoritePlace
 import com.mohamedabdallah.weather.data.forecast.ForecastResponse
 import com.mohamedabdallah.weather.data.weather.CurrentResponse
 
-@Database(entities = [FavoritePlace::class,ForecastResponse::class,CurrentResponse::class], version = 2,exportSchema = false)
+@Database(entities = [FavoritePlace::class,
+                        ForecastResponse::class,
+                            CurrentResponse::class,
+                                AlertResponse::class], version = 1,exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class WeatherDatabase : RoomDatabase() {
     abstract val dao: WeatherDao
@@ -35,3 +39,5 @@ abstract class WeatherDatabase : RoomDatabase() {
     }
 
 }
+
+

@@ -7,21 +7,21 @@
     <item android:title="@string/home"
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_home_24"
-        android:id="@+id/bottom_today"/>
+        android:id="@+id/homeFragment"/>
 
     <item android:title="@string/daily"
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_today_24"
-        android:id="@+id/bottom_daily"/>
+        android:id="@+id/dailyFragment"/>
 
     <item android:title="@string/map"
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_map_24"
-        android:id="@+id/bottom_map"/>
+        android:id="@+id/mapFragment"/>
 
     <item android:title="@string/settings"
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_settings_24"
-        android:id="@+id/bottom_settings"/>
+        android:id="@+id/settingsFragment"/>
 
 </menu>
