@@ -1,5 +1,7 @@
 package com.mohamedabdallah.weather.remote
 
+
+
 import com.mohamedabdallah.weather.data.weather.CurrentResponse
 import com.mohamedabdallah.weather.data.forecast.ForecastResponse
 import retrofit2.Response
@@ -8,13 +10,6 @@ import retrofit2.http.Query
 
 interface APiInterface {
 
-   /* @GET("weather")
-    suspend fun getWeatherByCityName(@Query("q") cityName:String,
-                                        @Query("appid") appId:String,
-                                            @Query("lang") lang:String,
-                                              @Query("units") unit: String):Response<CurrentResponse>
-
-    */
 
     @GET("weather")
     suspend fun getWeatherByLatLong(@Query("lat") latitude:Double,
@@ -46,6 +41,15 @@ interface APiInterface {
                                                                 @Query("units") unit: String):Response<ForecastData>
 
       */
+
+    /*
+    @GET("weather")
+    suspend fun getWeatherByCityName(@Query("q") cityName:String,
+                                       @Query("appid") appId:String,
+                                           @Query("lang") lang:String,
+                                             @Query("units") unit: String):Response<CurrentResponse>
+
+   */
 
 
 

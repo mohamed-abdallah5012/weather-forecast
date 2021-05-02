@@ -19,10 +19,6 @@ interface WeatherDao {
     @Query("select * from FavoritePlace ")
     fun getFavoritesPlaces(): LiveData<List<FavoritePlace>>
 
-   /////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////
-     ///////////////////////////////////////////////////////////
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveForecastResponse(item: ForecastResponse)
 

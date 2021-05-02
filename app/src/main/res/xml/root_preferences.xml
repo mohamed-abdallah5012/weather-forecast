@@ -18,7 +18,14 @@
             app:key="background_mode"
             app:title="@string/default_mode">
 
+
         </CheckBoxPreference>
+
+        <Preference
+            app:key="about"
+            app:title="@string/about_setting">
+
+        </Preference>
 
     </PreferenceCategory>
 

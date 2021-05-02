@@ -3,7 +3,9 @@ object Constant {
      const val baseUrl = "https://api.openweathermap.org/data/2.5/"
      const val appID = "a3f4fff6fb2630d7167440f05dd3bb4a"
      //const val appID = "dbd3b02d8958d62185d02e944cd5f522"
-     const val apiPlaces="AIzaSyDhtVSlNM52yj-vH7H7SMEFswg7CtaVCUQ"
+     //const val apiPlaces="AIzaSyDhtVSlNM52yj-vH7H7SMEFswg7CtaVCUQ"
+     const val apiPlaces="AIzaSyBGO5EimN8aQd0JkDACZKieisLot7h_1ZE"
+
      var api_lang="en"
       var baseUnit = "metric"
      const val exclude = "current,minutely"

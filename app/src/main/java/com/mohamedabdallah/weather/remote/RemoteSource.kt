@@ -11,13 +11,6 @@ class RemoteSource {
             .create(APiInterface::class.java)
 
 
-   /* suspend fun getWeatherByCityName(cityName:String,appId:String,lang:String,unit: String):
-            Response<CurrentResponse> {
-       return aPiInterface.getWeatherByCityName(cityName,appId,lang,unit)
-    }
-
-    */
-
     suspend fun getWeatherByLatLong(latitude:Double,longitude :Double, appId:String, lang:String, unit: String):
             Response<CurrentResponse> {
         return aPiInterface.getWeatherByLatLong(latitude,longitude,appId,lang,unit)
@@ -26,7 +19,15 @@ class RemoteSource {
     suspend fun getForecastOneApi(latitude:Double,longitude :Double, appId:String, lang:String, unit: String):
             Response<ForecastResponse> {
         return aPiInterface.getForecastOneApi(latitude,longitude,appId,lang,Constant.exclude,unit)
+
     }
+
+    /* suspend fun getWeatherByCityName(cityName:String,appId:String,lang:String,unit: String):
+            Response<CurrentResponse> {
+       return aPiInterface.getWeatherByCityName(cityName,appId,lang,unit)
+    }
+
+    */
 
 
 

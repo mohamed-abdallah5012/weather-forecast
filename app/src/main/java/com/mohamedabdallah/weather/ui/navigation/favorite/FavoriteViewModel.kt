@@ -22,6 +22,7 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+
     fun deleteCurrentResponse(lat:Double,lan:Double)
     {
         viewModelScope.launch {

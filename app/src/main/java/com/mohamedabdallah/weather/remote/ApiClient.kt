@@ -14,9 +14,6 @@ object ApiClient {
             .baseUrl(Constant.baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
-
-
-
             .build()
     }
 

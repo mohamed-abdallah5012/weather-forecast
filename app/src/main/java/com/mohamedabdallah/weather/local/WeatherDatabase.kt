@@ -13,7 +13,8 @@ import com.mohamedabdallah.weather.data.weather.CurrentResponse
 @Database(entities = [FavoritePlace::class,
                         ForecastResponse::class,
                             CurrentResponse::class,
-                                AlertResponse::class], version = 1,exportSchema = false)
+                                AlertResponse::class],
+                                    version = 1,exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class WeatherDatabase : RoomDatabase() {
     abstract val dao: WeatherDao
